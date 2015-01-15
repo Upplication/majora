@@ -6,3 +6,5 @@ Upplication Dashboard for templaters
 
 * Create a templater profile
 * Upload templates
+* Track the template versions
+* Add notes and comments
