@@ -25,6 +25,10 @@
         "express" : "4.11.*",
         "q" : "1.1.*",
         "lodash" : "2.4.*",
-        "winston" : "0.8.*"
+        "winston" : "0.8.*",
+        "cookie-parser" : "~1.0.1",
+        "body-parser" : "~1.0.0",
+        "mongodb" : "*",
+        "monk" : "*"
     }
 }
