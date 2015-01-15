@@ -1,6 +1,8 @@
 ## Majora Upplication
 
-helloooou!
+Upplication Dashboard for templaters
 
+### Features
 
-adiosss!
+* Create a templater profile
+* Upload templates
