@@ -7,9 +7,7 @@ var express = require('express'),
     winston = require('winston'),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
-    q = require('q'),
-    mongo = require('mongodb'),
-    monk = require('monk'),
+    mongoose = require('mongoose'),
 
     UserController = require('./controllers/user'),
     TemplateController = require('./controllers/template'),
@@ -27,17 +25,31 @@ var express = require('express'),
             })
         ]
     }),
-    app = express(),
-    db = monk(process.env.MAJORA_MONGODB_URL || 'localhost:27017/majora');
+    app = express();
 
 // Add middlewares
 app.use(bodyParser.json());
 app.use(cookieParser());
 
+var envs = {
+    'development': {
+        'mongodb': 'localhost:27017/majora' 
+    },
+    'test': {
+        'mongodb': 'localhost:27017/majora'
+    },
+    'production': {
+        'mongodb': process.env.MAJORA_MONGODB_URL || 'localhost:27017/majora'
+    }
+};
+
+// Configure mongoose for the different envs
+var env = process.env.NODE_ENV || 'development';
+mongoose.connect('mongodb://' + envs[env].mongodb);
+
 // Dependency Injection middleware
 // Throught this middleware the dependencies are injected to the controllers
 app.use(function (req, res, next) {
-    req.db = db;
     req.log = log;
 
     next();
@@ -49,9 +61,11 @@ app.use(function (req, res, next) {
 app.get('/', HomeController.main);
 
 // Serve
-var server = app.listen(process.env.MAJORA_PORT, function () {
+var server = app.listen(process.env.PORT || 3000, function () {
     log.log(_.template('Majora started at http://<%= host %>:<%= port %>', {
         host : server.address().address,
         port : server.address().port
     }));
 });
+
+module.exports = app;

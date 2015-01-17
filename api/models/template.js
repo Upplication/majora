@@ -1,5 +1,9 @@
 'use strict';
 
-var Template = {};
+var mongoose = require('mongoose'),
+    Schema = mongoose.Schema;
 
-module.exports = Template;
+var templateSchema = new Schema({
+});
+
+module.exports = mongoose.model('Template', templateSchema);
