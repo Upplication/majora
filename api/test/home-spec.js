@@ -3,7 +3,7 @@
 var express = require('express'),
     request = require('supertest');
 
-var app = require('../index.js');
+var app = require('../app.js');
 
 describe('HomeController', function () {
     describe('main', function () {

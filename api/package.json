@@ -33,6 +33,9 @@
     },
     "devDependencies": {
         "supertest": "0.7.*",
-        "mocha": "1.*"
+        "mocha": "1.*",
+        "gulp": "latest",
+        "gulp-express": "latest",
+        "shelljs": "latest"
     }
 }
