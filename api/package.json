@@ -4,7 +4,8 @@
     "description" : "Templaters Manager Dashboard",
     "main" : "index.js",
     "scripts" : {
-        "test" : "echo \"Error: no test specified\" && exit 1"
+        "start": "index.js",
+        "test" : "mocha"
     },
     "repository" : {
         "type" : "git",
@@ -28,7 +29,13 @@
         "winston" : "0.8.*",
         "cookie-parser" : "~1.0.1",
         "body-parser" : "~1.0.0",
-        "mongodb" : "*",
-        "monk" : "*"
+        "mongoose" : "3.6.*"
+    },
+    "devDependencies": {
+        "supertest": "0.7.*",
+        "mocha": "1.*",
+        "gulp": "latest",
+        "gulp-express": "latest",
+        "shelljs": "latest"
     }
 }
