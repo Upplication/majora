@@ -8,7 +8,7 @@ exports.config = {
     },
 
     specs: [
-        'e2e/example.spec.js'
+        'e2e/**/*.js'
     ],
 
     capabilities: {
