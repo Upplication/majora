@@ -10,6 +10,10 @@ var gulp = require('gulp'),
     uglify = require('gulp-uglify'),
     concat = require('gulp-concat'),
     esnext = require('gulp-esnext'),
+    karma = require('gulp-karma'),
+    protractor = require('gulp-protractor').protractor,
+    webdriverStandalone = require('gulp-protractor').webdriver_standalone,
+    webdriverUpdate = require('gulp-protractor').webdriver_update,
     refresh = require('gulp-livereload'),
     lr = require('tiny-lr'),
     lrserver = lr(),
@@ -79,18 +83,47 @@ gulp.task('templates', function () {
         .pipe(refresh(lrserver));
 });
 
-gulp.task('watch', function () {
+gulp.task('watch', ['server', 'protractor', 'karma'], function () {
     gulp.watch('src/**/*.less', ['less']);
     gulp.watch('src/**/*.jsx', ['react']);
     gulp.watch('src/**/*.js', ['js']);
     gulp.watch('src/index.html', ['index']);
     gulp.watch('src/templates/**/*.html', ['templates']);
+    gulp.watch(['dist/*', 'tests/e2e/*'], ['protractor']);
+    gulp.watch(['dist/*', 'tests/unit/*'], ['karma']);
 });
 
 gulp.task('serve', function () {
     http.createServer(ecstatic({ root: __dirname + '/dist' })).listen(8080);
     lrserver.listen(35515);
 });
+
+gulp.task('webdriver_update', webdriverUpdate);
+
+gulp.task('webdriver_standalone', ['webdriver_update'], webdriverStandalone);
+
+gulp.task('karma', function () {
+    gulp.src('tests/unit/*')
+        .pipe(karma({
+            configFile: 'tests/karma.conf.js',
+            action: 'run'
+        }))
+        .on('error', function (e) {
+            throw e;
+        });
+});
+
+gulp.task('protractor', ['webdriver_update'], function () {
+    gulp.src('tests/e2e/**/*.js')
+        .pipe(protractor({
+            configFile: 'tests/protractor.conf.js'
+        }))
+        .on('error', function (e) {
+            throw e;
+        });
+});
+
+gulp.task('test', ['default', 'serve', 'karma', 'protractor']);
 
 gulp.task('server', ['js', 'react', 'less', 'templates', 'index', 'vendor', 'watch', 'serve']);
 

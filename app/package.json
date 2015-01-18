@@ -32,15 +32,21 @@
         "gulp-less": "latest",
         "gulp-concat": "latest",
         "gulp-uglify": "latest",
-        "gulp-karma" : "latest",
-        "karma-jasmine" : "latest",
+        "karma": "latest",
+        "gulp-karma": "latest",
+        "karma-chrome-launcher": "latest",
+        "karma-beep-reporter": "latest",
+        "karma-growl-reporter": "latest",
+        "karma-jasmine": "latest",
         "phantomjs": "latest",
-        "karma-phantomjs-launcher" : "latest",
-        "gulp-minify-css" : "latest",
+        "karma-phantomjs-launcher": "latest",
+        "gulp-minify-css": "latest",
         "karma-spec-reporter": "latest",
         "gulp-angular-templates": "latest",
         "tiny-lr": "latest",
         "gulp-livereload": "latest",
-        "ecstatic": "latest"
+        "ecstatic": "latest",
+        "protractor": "latest",
+        "gulp-protractor": "latest"
     }
 }
