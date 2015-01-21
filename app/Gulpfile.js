@@ -83,7 +83,7 @@ gulp.task('templates', function () {
         .pipe(refresh(lrserver));
 });
 
-gulp.task('watch', ['server', 'protractor', 'karma'], function () {
+gulp.task('watch', function () {
     gulp.watch('src/**/*.less', ['less']);
     gulp.watch('src/**/*.jsx', ['react']);
     gulp.watch('src/**/*.js', ['js']);
@@ -91,6 +91,7 @@ gulp.task('watch', ['server', 'protractor', 'karma'], function () {
     gulp.watch('src/templates/**/*.html', ['templates']);
     gulp.watch(['dist/*', 'tests/e2e/*'], ['protractor']);
     gulp.watch(['dist/*', 'tests/unit/*'], ['karma']);
+    gulp.run(['server']);
 });
 
 gulp.task('serve', function () {

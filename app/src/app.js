@@ -5,11 +5,11 @@
     
     upp.config(['$routeProvider', function ($routeProvider) {
         $routeProvider.
-		  when('login', {
+		  when('/login', {
 			templateUrl: 'login.html',
 			controller: 'LoginCtrl'
 		  }).
-		  when('register', {
+		  when('/register', {
 			templateUrl: 'register.html',
 			controller: 'RegisterCtrl'
 		  }).

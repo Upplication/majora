@@ -1,5 +1,5 @@
-window.upp.controller('LoginCtrl', function ($scope){
+window.upp.controller('LoginCtrl',['$scope', function ($scope){
 
 	$scope.name = "Hola";
 
-});
+}]);
