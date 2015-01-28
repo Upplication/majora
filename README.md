@@ -1,3 +1,6 @@
+
+[![Build Status](https://travis-ci.org/Upplication/majora.svg)](https://travis-ci.org/Upplication/majora)
+
 ## Majora Upplication
 
 Upplication Dashboard for templaters
