@@ -1,5 +1,5 @@
-window.upp.controller('RegisterCtrl', function ($scope){
+window.upp.controller('RegisterCtrl', ['$scope',function ($scope){
 
 	//$scope.
 
-});
+}]);
