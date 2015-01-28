@@ -8,7 +8,7 @@ var express = require('express'),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
     mongoose = require('mongoose'),
-
+    env = require('./config'),
     UserController = require('./controllers/user'),
     TemplateController = require('./controllers/template'),
     HomeController = require('./controllers/home'),
@@ -31,21 +31,7 @@ var express = require('express'),
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-var envs = {
-    'development': {
-        'mongodb': 'localhost:27017/majora' 
-    },
-    'test': {
-        'mongodb': 'localhost:27017/majora'
-    },
-    'production': {
-        'mongodb': process.env.MAJORA_MONGODB_URL || 'localhost:27017/majora'
-    }
-};
-
-// Configure mongoose for the different envs
-var env = process.env.NODE_ENV || 'development';
-mongoose.connect('mongodb://' + envs[env].mongodb);
+mongoose.connect('mongodb://' + env.mongodb);
 
 // Dependency Injection middleware
 // Throught this middleware the dependencies are injected to the controllers
@@ -59,6 +45,8 @@ app.use(function (req, res, next) {
 
 // Add routes
 app.get('/', HomeController.main);
+app.post('/user/signup', UserController.signup);
+app.post('/user/login', UserController.login);
 
 // Serve
 var server = app.listen(process.env.PORT || 3000, function () {
