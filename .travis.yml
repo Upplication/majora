@@ -7,4 +7,5 @@ services:
   - mongodb
 before_script:
   - npm install -g gulp
+  - cd app && npm install
 script: cd app && gulp test
