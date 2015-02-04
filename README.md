@@ -5,6 +5,10 @@
 
 Upplication Dashboard for templaters
 
+### Live version
+
+* http://majora.upplication.com
+
 ### Features
 
 * Create a templater profile
