@@ -12,7 +12,7 @@ exports.config = {
     ],
 
     capabilities: {
-        'browserName': 'chrome'
+        'browserName': 'firefox'
     },
 
     baseUrl: 'http://localhost:8080'
