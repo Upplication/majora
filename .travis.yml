@@ -13,7 +13,7 @@ before_script:
 - sh -e /etc/init.d/xvfb start
 script: cd ../app && gulp test && cd ../api && npm test
 deploy:
-  - provider: s3
+- provider: s3
   skip_cleanup: true
   access_key_id:
     secure: Alsxg+sG80S2ku3kO5Shc669QC+NISTh6/PBOg09QNYLqxiZwhVs62TC201eoTpf8DxYPs1qBgPq+FiRo/TELTHWkpafwSra26oWh+y1fc7j+zps+RK+fK9+3x9jJMrc2aYAM2rRK+beXBfzg+vB9obW7UqXCpMznBWeTa2shNI=
@@ -23,7 +23,7 @@ deploy:
   local_dir: ../app/dist
   on:
     all_branches: true
-  - provider: elasticbeanstalk
+- provider: elasticbeanstalk
   skip_cleanup: true
   access_key_id:
     secure: Alsxg+sG80S2ku3kO5Shc669QC+NISTh6/PBOg09QNYLqxiZwhVs62TC201eoTpf8DxYPs1qBgPq+FiRo/TELTHWkpafwSra26oWh+y1fc7j+zps+RK+fK9+3x9jJMrc2aYAM2rRK+beXBfzg+vB9obW7UqXCpMznBWeTa2shNI=
