@@ -34,7 +34,6 @@
         "gulp-uglify": "latest",
         "karma": "latest",
         "gulp-karma": "latest",
-        "karma-chrome-launcher": "latest",
         "karma-beep-reporter": "latest",
         "karma-growl-reporter": "latest",
         "karma-jasmine": "latest",
