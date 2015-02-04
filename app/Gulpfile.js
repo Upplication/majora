@@ -124,7 +124,7 @@ gulp.task('protractor', ['webdriver_update'], function () {
         });
 });
 
-gulp.task('test', ['default', 'serve', 'karma', 'protractor']);
+gulp.task('test', ['default', 'karma', 'protractor']);
 
 gulp.task('server', ['js', 'react', 'less', 'templates', 'index', 'vendor', 'watch', 'serve']);
 

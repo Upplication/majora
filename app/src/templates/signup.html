@@ -1,32 +1,32 @@
-<div class="container" data-ng-controller="SigninCtrl as login">
+<div class="container" data-ng-controller="SignupCtrl as signup">
     <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <div class="panel-title">Sign in</div>
+                <div class="panel-title">Sign up</div>
             </div>
 
             <div class="panel-body">
-                <div id="login-alert" class="alert alert-danger col-sm-12" data-ng-show="login.error">
-                    Invalid username or password.
+                <div id="login-alert" class="alert alert-danger col-sm-12" data-ng-show="signup.error">
+                    There is already an user with that email.
                 </div>
 
-                <form id="loginForm" class="form-horizontal" name="loginForm" role="form" novalidate>
+                <form id="signupForm" class="form-horizontal" name="signupForm" role="form" novalidate>
                     <div>
                         <label for="email">Email address</label>
-                        <input id="email" type="email" class="form-control" data-ng-model="login.data.email"
+                        <input id="email" type="email" class="form-control" data-ng-model="signup.data.email"
                                name="email" placeholder="Enter your email..." required>
                     </div>
 
                     <div class="margin-top-1em">
                         <label for="password">Password</label>
-                        <input id="password" type="password" class="form-control" data-ng-model="login.data.password"
+                        <input id="password" type="password" class="form-control" data-ng-model="signup.data.password"
                                name="password" placeholder="Enter your password..." minlength="8" maxlength="128"
                                required>
                     </div>
 
                     <div class="col-sm-12 controls form-group margin-top-1em">
-                        <a id="btn-login" class="btn btn-primary" data-ng-click="login.submit();"
-                           data-ng-disabled="loginForm.$invalid">Sign in</a>
+                        <a id="btn-signup" class="btn btn-primary" data-ng-click="signup.submit();"
+                           data-ng-disabled="signupForm.$invalid">Sign up</a>
                     </div>
                 </form>
             </div>
