@@ -1,18 +1,23 @@
 language: node_js
 node_js:
-  - "0.10"
+- '0.10'
 env:
-  - NODE_ENV=test
+- NODE_ENV=test
 services:
-  - mongodb
+- mongodb
 before_script:
-  - npm install -g gulp
-  - cd app && npm install
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
+- npm install -g gulp
+- cd app && npm install
+- export DISPLAY=:99.0
+- sh -e /etc/init.d/xvfb start
 script: gulp test
 deploy:
   provider: s3
-  access_key_id: ${AWS_ACCESS_KEY}
-  secret_access_key: ${AWS_SECRET_KEY}
-  bucket: "majora-web"
+  access_key_id:
+    secure: Alsxg+sG80S2ku3kO5Shc669QC+NISTh6/PBOg09QNYLqxiZwhVs62TC201eoTpf8DxYPs1qBgPq+FiRo/TELTHWkpafwSra26oWh+y1fc7j+zps+RK+fK9+3x9jJMrc2aYAM2rRK+beXBfzg+vB9obW7UqXCpMznBWeTa2shNI=
+  secret_access_key:
+    secure: q8WvDu6NzJzIxSVhbhayTnlt0DilSUJgOYxZ6wcD7+4o3/xnHe+dq1CC1/rxiBl+oeufz7XxdpVq3UuNHi9Ive1Vyvb1kwUIZj3ncHt6A1jAY0OTV1HTT763DlLv47mMOXexP/ly/Ik+GPbwV5VR/8U0z+uonEZpQAWGyPJ8GyQ=
+  bucket: majora-web
+  local_dir: app/dist
+  on:
+    all_branches: true
