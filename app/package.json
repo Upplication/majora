@@ -1,6 +1,6 @@
 {
     "name": "Majora",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "Templaters dashboard client app.",
     "main": "dist/index.html",
     "scripts": {

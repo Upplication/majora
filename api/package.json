@@ -1,6 +1,6 @@
 {
     "name" : "Majora",
-    "version" : "0.0.1",
+    "version" : "0.0.2",
     "description" : "Templaters Manager Dashboard",
     "main" : "index.js",
     "scripts" : {
