@@ -1,51 +1,53 @@
 {
-    "name": "Majora",
-    "version": "0.0.2",
-    "description": "Templaters dashboard client app.",
-    "main": "dist/index.html",
-    "scripts": {
-        "test": "gulp test",
-        "postinstall": "bower install"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/Upplication/majora"
-    },
-    "keywords": [
-        "templates",
-        "dashboard",
-        "upplication",
-        "react",
-        "angular"
-    ],
-    "author": "",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/Upplication/majora/issues"
-    },
-    "homepage": "https://github.com/Upplication/majora",
-    "devDependencies": {
-        "bower": "latest",
-        "gulp": "latest",
-        "gulp-esnext": "latest",
-        "gulp-react": "latest",
-        "gulp-less": "latest",
-        "gulp-concat": "latest",
-        "gulp-uglify": "latest",
-        "karma": "latest",
-        "gulp-karma": "latest",
-        "karma-beep-reporter": "latest",
-        "karma-growl-reporter": "latest",
-        "karma-jasmine": "latest",
-        "phantomjs": "latest",
-        "karma-phantomjs-launcher": "latest",
-        "gulp-minify-css": "latest",
-        "karma-spec-reporter": "latest",
-        "gulp-angular-templates": "latest",
-        "tiny-lr": "latest",
-        "gulp-livereload": "latest",
-        "ecstatic": "latest",
-        "protractor": "latest",
-        "gulp-protractor": "latest"
-    }
+  "name": "Majora",
+  "version": "0.0.2",
+  "description": "Templaters dashboard client app.",
+  "main": "dist/index.html",
+  "scripts": {
+    "test": "gulp test",
+    "postinstall": "bower install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Upplication/majora"
+  },
+  "keywords": [
+    "templates",
+    "dashboard",
+    "upplication",
+    "react",
+    "angular"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Upplication/majora/issues"
+  },
+  "homepage": "https://github.com/Upplication/majora",
+  "devDependencies": {
+    "bower": "latest",
+    "gulp": "latest",
+    "gulp-esnext": "latest",
+    "gulp-react": "latest",
+    "gulp-less": "latest",
+    "gulp-concat": "latest",
+    "gulp-uglify": "latest",
+    "karma": "latest",
+    "gulp-karma": "latest",
+    "karma-beep-reporter": "latest",
+    "karma-growl-reporter": "latest",
+    "karma-jasmine": "latest",
+    "phantomjs": "latest",
+    "karma-phantomjs-launcher": "latest",
+    "gulp-minify-css": "latest",
+    "karma-spec-reporter": "latest",
+    "gulp-angular-templates": "latest",
+    "tiny-lr": "latest",
+    "gulp-livereload": "latest",
+    "ecstatic": "latest",
+    "protractor": "latest",
+    "gulp-protractor": "latest",
+    "grunt": "~0.4.5",
+    "gulp-ng-config": "~1.0.0"
+  }
 }

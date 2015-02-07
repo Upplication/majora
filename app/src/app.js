@@ -1,7 +1,7 @@
 (function (window, angular) {
     "use strict";
 
-    var upp = angular.module('upp', ['ngRoute']);
+    var upp = angular.module('upp', ['ngRoute', 'config']);
 
     upp.config(['$routeProvider', function ($routeProvider) {
         $routeProvider.

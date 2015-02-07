@@ -16,6 +16,7 @@ var gulp = require('gulp'),
     webdriverUpdate = require('gulp-protractor').webdriver_update,
     refresh = require('gulp-livereload'),
     lr = require('tiny-lr'),
+    ngConfig = require('gulp-ng-config'),
     lrserver = lr(),
     vendorPaths = [
         'angular/angular.min.js',
@@ -26,6 +27,18 @@ var gulp = require('gulp'),
         'animate.css/animate.min.css',
         'bootstrap/dist/css/bootstrap.min.css'
     ];
+
+gulp.task('config', function(){
+    var envConfig = process.env.NODE_ENV || 'development';
+    gulp.src('./config-' + envConfig + '.json')
+        .pipe(ngConfig('config'))
+        .pipe(gulp.dest('dist/config'));
+    // rename config and
+    gulp.src('dist/config/*.js')
+        .pipe(concat('config.min.js'))
+        .pipe(gulp.dest('dist/js'));
+});
+
 
 gulp.task('js', function () {
     gulp.src('src/**/*.js')
@@ -126,6 +139,6 @@ gulp.task('protractor', ['webdriver_update'], function () {
 
 gulp.task('test', ['default', 'karma', 'protractor']);
 
-gulp.task('server', ['js', 'react', 'less', 'templates', 'index', 'vendor', 'watch', 'serve']);
+gulp.task('server', ['js', 'config', 'react', 'less', 'templates', 'index', 'vendor', 'watch', 'serve']);
 
-gulp.task('default', ['js', 'react', 'less', 'templates', 'index', 'vendor']);
+gulp.task('default', ['js', 'config', 'react', 'less', 'templates', 'index', 'vendor']);
