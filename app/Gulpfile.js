@@ -32,9 +32,6 @@ gulp.task('config', function(){
     var envConfig = process.env.NODE_ENV || 'development';
     gulp.src('./config-' + envConfig + '.json')
         .pipe(ngConfig('config'))
-        .pipe(gulp.dest('dist/config'));
-    // rename config and
-    gulp.src('dist/config/*.js')
         .pipe(concat('config.min.js'))
         .pipe(gulp.dest('dist/js'));
 });
