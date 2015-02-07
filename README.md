@@ -16,3 +16,18 @@ Upplication Dashboard for templaters
 * Control design rules
 * Track the template versions
 * Add notes and comments
+
+## How to contribute
+
+```
+npm install
+```
+
+```
+bower install
+```
+
+```
+gulp server
+```
+
