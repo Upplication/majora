@@ -8,7 +8,7 @@
 
         /**
          * Stores the token on localStorage
-         * @param {String} token Token
+         * @param {Object} token Token
          */
         service.storeToken = function (token) {
             localStorage.setItem(TOKEN_KEY, angular.toJson(token));

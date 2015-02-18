@@ -10,7 +10,7 @@ var gulp = require('gulp'),
     uglify = require('gulp-uglify'),
     concat = require('gulp-concat'),
     esnext = require('gulp-esnext'),
-    karma = require('gulp-karma'),
+    karma = require('karma').server,
     protractor = require('gulp-protractor').protractor,
     webdriverStandalone = require('gulp-protractor').webdriver_standalone,
     webdriverUpdate = require('gulp-protractor').webdriver_update,
@@ -112,15 +112,11 @@ gulp.task('webdriver_update', webdriverUpdate);
 
 gulp.task('webdriver_standalone', ['webdriver_update'], webdriverStandalone);
 
-gulp.task('karma', function () {
-    gulp.src('tests/unit/*')
-        .pipe(karma({
-            configFile: 'tests/karma.conf.js',
-            action: 'run'
-        }))
-        .on('error', function (e) {
-            throw e;
-        });
+gulp.task('karma', function (done) {
+    karma.start({
+        configFile: __dirname + '/tests/karma.conf.js',
+        singleRun: true
+    }, done);
 });
 
 gulp.task('protractor', ['webdriver_update'], function () {
@@ -134,6 +130,8 @@ gulp.task('protractor', ['webdriver_update'], function () {
 });
 
 gulp.task('test', ['default', 'karma', 'protractor']);
+
+gulp.task('test_unit', ['default', 'karma']);
 
 gulp.task('server', ['js', 'config', 'react', 'less', 'templates', 'index', 'vendor', 'watch', 'serve']);
 

@@ -1,4 +1,4 @@
-<div class="container" data-ng-controller="SignupCtrl as signup">
+<div class="container" data-ng-controller="SigninCtrl as signup">
     <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -25,7 +25,7 @@
                     </div>
 
                     <div class="col-sm-12 controls form-group margin-top-1em">
-                        <a id="btn-signup" class="btn btn-primary" data-ng-click="signup.submit();"
+                        <a id="btn-signup" class="btn btn-primary" data-ng-click="signup.submitSignup();"
                            data-ng-disabled="signupForm.$invalid">Sign up</a>
                     </div>
                 </form>

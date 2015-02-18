@@ -11,16 +11,18 @@
             /**
              * Submits the form to the server
              */
-            this.submit = function () {
-                userService.signin(this.data.email, this.data.password).then(function (token) {
-                    this.error = false;
-                    authService.storeToken(token);
+            ['signup', 'signin'].forEach(function (m) {
+                this['submit' + (m[0].toUpperCase() + m.slice(1))] = function () {
+                    userService[m](this.data.email, this.data.password).then(function (token) {
+                        this.error = false;
+                        authService.storeToken(token);
 
-                    $location.path('/');
-                }, function () {
-                    this.error = true;
-                }.bind(this));
-            };
+                        $location.path('/');
+                    }.bind(this), function () {
+                        this.error = true;
+                    }.bind(this));
+                }.bind(this);
+            }.bind(this));
         }
     ]);
 
