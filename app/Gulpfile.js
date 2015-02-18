@@ -28,14 +28,13 @@ var gulp = require('gulp'),
         'bootstrap/dist/css/bootstrap.min.css'
     ];
 
-gulp.task('config', function(){
+gulp.task('config', function () {
     var envConfig = process.env.NODE_ENV || 'development';
     gulp.src('./config-' + envConfig + '.json')
         .pipe(ngConfig('config'))
         .pipe(concat('config.min.js'))
         .pipe(gulp.dest('dist/js'));
 });
-
 
 gulp.task('js', function () {
     gulp.src('src/**/*.js')
