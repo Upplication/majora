@@ -61,7 +61,7 @@ NODE_ENV=production
 
 You can add more environments creating a new config-xxxx.json and setting the NODE_ENV=xxxx
 
-### Running Tests
+#### Running Tests
 
 To execute all unit and end-to-end (e2e) tests, use:
 
