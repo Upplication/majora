@@ -17,7 +17,7 @@
                 email: email,
                 password: password
             }).then(function (response) {
-                deferred.resolve(response.token);
+                deferred.resolve(response.data.token);
             }, function (err) {
                 deferred.reject(err);
             });
@@ -38,7 +38,7 @@
                 email: email,
                 password: password
             }).then(function (response) {
-                deferred.resolve(response.token);
+                deferred.resolve(response.data.token);
             }, function (err) {
                 deferred.reject(err);
             });
