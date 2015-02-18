@@ -1,7 +1,7 @@
 (function (window, upp) {
     "use strict";
 
-    upp.service('userService', ['$http', '$q', 'config', function ($http, $q, config) {
+    upp.service('userService', ['$http', '$q', 'endpoint', function ($http, $q, endpoint) {
         var service = {};
 
         /**
@@ -13,7 +13,7 @@
         service.signup = function (email, password) {
             var deferred = $q.defer();
 
-            $http.post(config.endpoint + '/user/signup', {
+            $http.post(endpoint + '/user/signup', {
                 email: email,
                 password: password
             }).then(function (response) {
@@ -34,7 +34,7 @@
         service.signin = function (email, password) {
             var deferred = $q.defer();
 
-            $http.post(config.endpoint + '/user/login', {
+            $http.post(endpoint + '/user/login', {
                 email: email,
                 password: password
             }).then(function (response) {
