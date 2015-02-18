@@ -10,7 +10,7 @@
 
 describe('the password is empty', function(){
 	it('should disable signin button', function(){
-		browser.get('/signin');
+		browser.get('http://localhost:8000/user/signup');
 
 		element(by.model('login.data.email')).sendKeys('paco@gmail.com');
     	element(by.model('login.data.password')).sendKeys('');
