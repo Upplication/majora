@@ -1,25 +1,59 @@
 'use strict';
 
-/*describe('the page homepage', function() {
-    it('should have a title', function() {
-        browser.get('/');
 
-        expect(browser.getTitle()).toEqual('Upplication');
-    });
-});*/
 
-describe('the password is empty', function(){
+describe('SignIn: the password is empty', function(){
 	it('should disable signin button', function(){
-		browser.get('http://localhost:8000/user/signup');
+		browser.get('#/user/signup');
 
-		element(by.model('login.data.email')).sendKeys('paco@gmail.com');
-    	element(by.model('login.data.password')).sendKeys('');
+		element(by.id('email')).sendKeys('paco@gmail.com');
+    	element(by.id('password')).sendKeys('');
 
-    	var signinButton  = element(by.id('btn-login'));
-    	expect(signinButton.isEnabled()).toBe([false]);
+    	var signinButton  = element(by.id('btn-signup'));
+
+		expect(signinButton).toBeDisabled();
 
 	});
 });
+/*
+describe('LogIn: the password is empty', function(){
+	it('An error message is displayed.', function(){
+		browser.get('#/user/login');
+
+		element(by.id('email')).sendKeys('paco@gmail.com');
+    	element(by.id('password')).sendKeys('');
+    	
+		//click on login button
+		
+		var loginBtn = element(by.id('btn-login'));
+		
+		loginBtn.click();
+		
+		//An error message appeared
+		//expect(element(by.id('login-alert')).count()).toEqual(1);
+		expect(loginBtn).toBeDefined();
+
+	});
+});*/
+
+/*
+describe('LogIn: the email is empty', function(){
+	it('An error message is displayed.', function(){
+		browser.get('#/user/login');
+
+		//element(by.id('email')).sendKeys('');
+		
+		element( by.id('password') ).sendKeys("1234", protractor.Key.ENTER);
+		
+		var loginAlert = element(by.id('login-alert'));
+    			
+		//An error message appeared
+		expect(loginAlert).toBe('Invalid username or password.');
+
+	});
+});*/
+
+
 
 
 /*describe('Test user Login Email: paco@gmail.com / Password: 1234', function() {
