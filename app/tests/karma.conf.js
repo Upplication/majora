@@ -13,11 +13,11 @@ module.exports = function (config) {
             '../dist/js/templates.min.js',
             'unit/**/*.spec.js'
         ],
-        plugins: ['karma-jasmine', 'karma-phantomjs-launcher', 'karma-spec-reporter', 'karma-beep-reporter', 'karma-growl-reporter'],
+        plugins: ['karma-jasmine', 'karma-phantomjs-launcher', 'karma-spec-reporter'],
         port: 9876,
         colors: true,
         autoWatch: true,
-        reporters: ['spec', 'beep'],
+        reporters: ['spec'],
         browsers: ['PhantomJS'],
         captureTimeout: 60000,
         singleRun: true

@@ -2,7 +2,6 @@
 
 var gulp = require('gulp'),
     http = require('http'),
-    ecstatic = require('ecstatic'),
     react = require('gulp-react'),
     less = require('gulp-less'),
     minifyCSS = require('gulp-minify-css'),
@@ -14,10 +13,8 @@ var gulp = require('gulp'),
     protractor = require('gulp-protractor').protractor,
     webdriverStandalone = require('gulp-protractor').webdriver_standalone,
     webdriverUpdate = require('gulp-protractor').webdriver_update,
-    refresh = require('gulp-livereload'),
-    lr = require('tiny-lr'),
+    connect = require('gulp-connect'),
     ngConfig = require('gulp-ng-config'),
-    lrserver = lr(),
     vendorPaths = [
         'angular/angular.min.js',
         'angular-route/angular-route.min.js',
@@ -42,7 +39,7 @@ gulp.task('js', function () {
         .pipe(esnext())
         .pipe(uglify())
         .pipe(gulp.dest('dist/js'))
-        .pipe(refresh(lrserver));
+        .pipe(connect.reload());
 });
 
 gulp.task('react', function () {
@@ -51,13 +48,25 @@ gulp.task('react', function () {
         .pipe(concat('components.min.js'))
         .pipe(uglify())
         .pipe(gulp.dest('dist/js'))
-        .pipe(refresh(lrserver));
+        .pipe(connect.reload());
 });
 
 gulp.task('index', function () {
     gulp.src('src/index.html')
         .pipe(gulp.dest('dist'))
-        .pipe(refresh(lrserver));
+        .pipe(connect.reload());
+});
+
+gulp.task('test_index', function () {
+    gulp.src('src/index_e2e.html')
+        .pipe(gulp.dest('dist'))
+        .pipe(connect.reload());
+});
+
+gulp.task('vendor_mock', function () {
+    gulp.src('vendor/angular-mocks/*.js')
+        .pipe(gulp.dest('dist/js'))
+        .pipe(connect.reload());
 });
 
 gulp.task('less', function () {
@@ -68,7 +77,7 @@ gulp.task('less', function () {
         .pipe(minifyCSS({keepBreaks: false}))
         .pipe(concat('style.min.css'))
         .pipe(gulp.dest('dist/css'))
-        .pipe(refresh(lrserver));
+        .pipe(connect.reload());
 });
 
 gulp.task('vendor', function () {
@@ -78,7 +87,7 @@ gulp.task('vendor', function () {
         .pipe(concat('vendor.min.js'))
         .pipe(uglify())
         .pipe(gulp.dest('dist/js'))
-        .pipe(refresh(lrserver));
+        .pipe(connect.reload());
 });
 
 gulp.task('templates', function () {
@@ -89,7 +98,7 @@ gulp.task('templates', function () {
         .pipe(concat('templates.min.js'))
         .pipe(uglify())
         .pipe(gulp.dest('dist/js'))
-        .pipe(refresh(lrserver));
+        .pipe(connect.reload());
 });
 
 gulp.task('watch', function () {
@@ -98,14 +107,16 @@ gulp.task('watch', function () {
     gulp.watch('src/**/*.js', ['js']);
     gulp.watch('src/index.html', ['index']);
     gulp.watch('src/templates/**/*.html', ['templates']);
-    gulp.watch(['dist/*', 'tests/e2e/*'], ['protractor']);
-    gulp.watch(['dist/*', 'tests/unit/*'], ['karma']);
+    gulp.watch('tests/unit/*', ['karma']);
     gulp.run(['server']);
 });
 
 gulp.task('serve', function () {
-    http.createServer(ecstatic({ root: __dirname + '/dist' })).listen(8080);
-    lrserver.listen(35515);
+    connect.server({
+        root: 'dist',
+        port: 9090,
+        livereload: true
+    });
 });
 
 gulp.task('webdriver_update', webdriverUpdate);
@@ -123,13 +134,10 @@ gulp.task('protractor', ['webdriver_update'], function () {
     gulp.src('tests/e2e/**/*.js')
         .pipe(protractor({
             configFile: 'tests/protractor.conf.js'
-        }))
-        .on('error', function (e) {
-            throw e;
-        });
+        }));
 });
 
-gulp.task('test', ['default', 'karma', 'protractor']);
+gulp.task('test', ['default', 'test_index', 'vendor_mock', 'karma', 'protractor']);
 
 gulp.task('test_unit', ['default', 'karma']);
 

@@ -8,21 +8,23 @@
                 password: ''
             };
 
+            var self = this;
+
             /**
              * Submits the form to the server
              */
             ['signup', 'signin'].forEach(function (m) {
-                this['submit' + (m[0].toUpperCase() + m.slice(1))] = function () {
-                    userService[m](this.data.email, this.data.password).then(function (token) {
-                        this.error = false;
+                self['submit' + (m[0].toUpperCase() + m.slice(1))] = function () {
+                    userService[m](self.data.email, self.data.password).then(function (token) {
+                        self.error = false;
                         authService.storeToken(token);
 
                         $location.path('/');
-                    }.bind(this), function () {
-                        this.error = true;
-                    }.bind(this));
-                }.bind(this);
-            }.bind(this));
+                    }, function () {
+                        self.error = true;
+                    });
+                };
+            });
         }
     ]);
 

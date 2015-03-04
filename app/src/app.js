@@ -1,9 +1,11 @@
-(function (window, angular) {
+(function (window) {
     "use strict";
 
-    var upp = angular.module('upp', ['ngRoute', 'config']);
+    if (!window.upp) {
+        window.upp = angular.module('upp', ['ngRoute', 'config']);
+    }
 
-    upp.config(['$routeProvider', function ($routeProvider) {
+    window.upp.config(['$routeProvider', function ($routeProvider) {
         $routeProvider.
             when('/user/login', {
                 templateUrl: 'login.html'
@@ -16,6 +18,4 @@
             });
     }]);
 
-    window.upp = upp;
-
-}(window, angular));
+}(window));

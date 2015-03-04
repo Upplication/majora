@@ -21,12 +21,12 @@ exports.config = {
     },
     
     beforeLaunch: function () {
-        server.listen(9090);
+        server.listen(9999);
     },
     
     onComplete: function () {
         server.close(function () {});
     },
 
-    baseUrl: 'http://localhost:9090'
+    baseUrl: 'http://localhost:9999/index_e2e.html#'
 };

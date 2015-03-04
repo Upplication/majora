@@ -32,21 +32,18 @@
     "gulp-less": "latest",
     "gulp-concat": "latest",
     "gulp-uglify": "latest",
-    "karma": "latest",
-    "karma-beep-reporter": "latest",
-    "karma-growl-reporter": "latest",
+    "gulp-karma": "latest",
     "karma-jasmine": "latest",
     "phantomjs": "latest",
     "karma-phantomjs-launcher": "latest",
     "gulp-minify-css": "latest",
     "karma-spec-reporter": "latest",
     "gulp-angular-templates": "latest",
-    "tiny-lr": "latest",
-    "gulp-livereload": "latest",
+    "gulp-connect": "2.2.*",
     "ecstatic": "latest",
     "protractor": "latest",
     "gulp-protractor": "latest",
-    "grunt": "~0.4.5",
-    "gulp-ng-config": "~1.0.0"
+    "gulp-ng-config": "~1.0.0",
+    "http-backend-proxy": "1.4.*"
   }
 }
