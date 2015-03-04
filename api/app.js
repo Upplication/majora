@@ -10,6 +10,7 @@ var express = require('express'),
     mongoose = require('mongoose'),
     env = require('./config'),
     UserController = require('./controllers/user'),
+    ApiController = require('./controllers/api'),
     TemplateController = require('./controllers/template'),
     HomeController = require('./controllers/home'),
 
@@ -57,6 +58,12 @@ app.use(function(req, res, next) {
 app.get('/', HomeController.main);
 app.post('/user/signup', UserController.signup);
 app.post('/user/login', UserController.login);
+// api router
+app.get('/api/v1/', ApiController.v1.hello);
+app.get('/api/v1/templates', ApiController.v1.getTemplates);
+app.get('/api/v1/templates/:id', ApiController.v1.getTemplate);
+
+
 
 // Serve
 var server = app.listen(process.env.PORT || 3000, function () {
