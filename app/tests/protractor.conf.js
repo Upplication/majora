@@ -17,7 +17,7 @@ exports.config = {
     ],
 
     capabilities: {
-        'browserName': 'chrome'
+        'browserName': 'firefox'
     },
     
     beforeLaunch: function () {
@@ -28,5 +28,5 @@ exports.config = {
         server.close(function () {});
     },
 
-    baseUrl: 'http://localhost:9999'
+    baseUrl: 'http://localhost:9999/index_e2e.html#'
 };

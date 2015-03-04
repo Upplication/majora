@@ -5,17 +5,19 @@ module.exports = function (config) {
         basePath: '',
         frameworks: ['jasmine'],
         files: [
-            '../dist/js/vendor.min.js',
-            '../dist/js/components.min.js',
+            '../vendor/angular/angular.min.js',
+            '../vendor/angular-route/angular-route.min.js',
+            '../vendor/angular-mocks/angular-mocks.js',
+            '../dist/js/config.min.js',
             '../dist/js/app.min.js',
             '../dist/js/templates.min.js',
-            'unit/**/*.js'
+            'unit/**/*.spec.js'
         ],
-        plugins: ['karma-jasmine', 'karma-phantomjs-launcher', 'karma-spec-reporter', 'karma-beep-reporter', 'karma-growl-reporter'],
+        plugins: ['karma-jasmine', 'karma-phantomjs-launcher', 'karma-spec-reporter'],
         port: 9876,
         colors: true,
         autoWatch: true,
-        reporters: ['growl', 'spec', 'beep'],
+        reporters: ['spec'],
         browsers: ['PhantomJS'],
         captureTimeout: 60000,
         singleRun: true

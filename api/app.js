@@ -37,11 +37,21 @@ mongoose.connect('mongodb://' + env.mongodb);
 // Throught this middleware the dependencies are injected to the controllers
 app.use(function (req, res, next) {
     req.log = log;
-
     next();
 });
 
 // TODO: Configure error handlers?
+
+// interceptos
+
+// Cors interceptor
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Credentials", "true");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
+    next();
+});
 
 // Add routes
 app.get('/', HomeController.main);

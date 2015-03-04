@@ -9,11 +9,12 @@ var gulp = require('gulp'),
     uglify = require('gulp-uglify'),
     concat = require('gulp-concat'),
     esnext = require('gulp-esnext'),
-    karma = require('gulp-karma'),
+    karma = require('karma').server,
     protractor = require('gulp-protractor').protractor,
     webdriverStandalone = require('gulp-protractor').webdriver_standalone,
     webdriverUpdate = require('gulp-protractor').webdriver_update,
     connect = require('gulp-connect'),
+    ngConfig = require('gulp-ng-config'),
     vendorPaths = [
         'angular/angular.min.js',
         'angular-route/angular-route.min.js',
@@ -23,6 +24,14 @@ var gulp = require('gulp'),
         'animate.css/animate.min.css',
         'bootstrap/dist/css/bootstrap.min.css'
     ];
+
+gulp.task('config', function () {
+    var envConfig = process.env.NODE_ENV || 'development';
+    gulp.src('./config-' + envConfig + '.json')
+        .pipe(ngConfig('config'))
+        .pipe(concat('config.min.js'))
+        .pipe(gulp.dest('dist/js'));
+});
 
 gulp.task('js', function () {
     gulp.src('src/**/*.js')
@@ -45,6 +54,18 @@ gulp.task('react', function () {
 gulp.task('index', function () {
     gulp.src('src/index.html')
         .pipe(gulp.dest('dist'))
+        .pipe(connect.reload());
+});
+
+gulp.task('test_index', function () {
+    gulp.src('src/index_e2e.html')
+        .pipe(gulp.dest('dist'))
+        .pipe(connect.reload());
+});
+
+gulp.task('vendor_mock', function () {
+    gulp.src('vendor/angular-mocks/*.js')
+        .pipe(gulp.dest('dist/js'))
         .pipe(connect.reload());
 });
 
@@ -86,8 +107,7 @@ gulp.task('watch', function () {
     gulp.watch('src/**/*.js', ['js']);
     gulp.watch('src/index.html', ['index']);
     gulp.watch('src/templates/**/*.html', ['templates']);
-    gulp.watch(['dist/*', 'tests/e2e/*'], ['protractor']);
-    gulp.watch(['dist/*', 'tests/unit/*'], ['karma']);
+    gulp.watch('tests/unit/*', ['karma']);
     gulp.run(['server']);
 });
 
@@ -103,12 +123,11 @@ gulp.task('webdriver_update', webdriverUpdate);
 
 gulp.task('webdriver_standalone', ['webdriver_update'], webdriverStandalone);
 
-gulp.task('karma', function () {
-    gulp.src('tests/unit/*')
-        .pipe(karma({
-            configFile: 'tests/karma.conf.js',
-            action: 'run'
-        }));
+gulp.task('karma', function (done) {
+    karma.start({
+        configFile: __dirname + '/tests/karma.conf.js',
+        singleRun: true
+    }, done);
 });
 
 gulp.task('protractor', ['webdriver_update'], function () {
@@ -118,8 +137,10 @@ gulp.task('protractor', ['webdriver_update'], function () {
         }));
 });
 
-gulp.task('test', ['default', 'karma', 'protractor']);
+gulp.task('test', ['default', 'test_index', 'vendor_mock', 'karma', 'protractor']);
 
-gulp.task('server', ['js', 'react', 'less', 'templates', 'index', 'vendor', 'watch', 'serve']);
+gulp.task('test_unit', ['default', 'karma']);
 
-gulp.task('default', ['js', 'react', 'less', 'templates', 'index', 'vendor']);
+gulp.task('server', ['js', 'config', 'react', 'less', 'templates', 'index', 'vendor', 'watch', 'serve']);
+
+gulp.task('default', ['js', 'config', 'react', 'less', 'templates', 'index', 'vendor']);

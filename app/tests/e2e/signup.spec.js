@@ -1,5 +1,8 @@
 'use strict';
 
+var HttpBackend = require('http-backend-proxy');
+var proxy = new HttpBackend(browser);
+
 describe('e2e / signup', function () {
     var mail, pwd, btn;
 
@@ -60,9 +63,22 @@ describe('e2e / signup', function () {
         });
     });
 
-    describe('when user enters valid data and submits the form', function () {
+    /*describe('when user enters valid data and submits the form', function () {
+        it('should register the user', function () {
+            fillForm('valid@email.org', '12345678');
+            btn.click();
 
-    });
+            proxy.whenPOST(/\/user\/signup/).respond(200, {
+                success: true,
+                token: {
+                    token: '1234',
+                    expiration: 1
+                }
+            });
+
+            expect(browser.getCurrentUrl()).toBe('http://localhost:9999/#/');
+        });
+    });*/
 
 
 });
