@@ -1,16 +1,22 @@
 'use strict';
 
-var HttpBackend = require('http-backend-proxy');
-var proxy = new HttpBackend(browser);
+var HttpBackend = require('httpbackend'),
+    backend;
 
 describe('e2e / signup', function () {
     var mail, pwd, btn;
 
     beforeEach(function () {
-        browser.get('/#/user/signup');
+        backend = new HttpBackend(browser);
+        browser.get('#/user/signup');
+
         mail = element(by.id('email'));
         pwd = element(by.id('password'));
         btn = element(by.id('btn-signup'));
+    });
+
+    afterEach(function () {
+        backend.clear();
     });
 
     function fillForm(_mail, _pwd) {
@@ -24,6 +30,10 @@ describe('e2e / signup', function () {
 
     function btnDisabled() {
         expect(btn.isEnabled()).toBe(false);
+    }
+
+    function alertDisplayed(displayed) {
+        expect(element(by.id('login-alert')).isDisplayed()).toBe(displayed);
     }
 
     describe('when you don\'t add the user email or the password', function () {
@@ -63,22 +73,37 @@ describe('e2e / signup', function () {
         });
     });
 
-    /*describe('when user enters valid data and submits the form', function () {
+    describe('when user enters valid data and submits the form', function () {
         it('should register the user', function () {
+            backend.whenPOST(/user\/signup/).respond(function (method, url, data) {
+                return [200, {
+                    success: false,
+                    token: {
+                        token: '1234',
+                        expiration: 1
+                    }
+                }];
+            });
+
             fillForm('valid@email.org', '12345678');
             btn.click();
 
-            proxy.whenPOST(/\/user\/signup/).respond(200, {
-                success: true,
-                token: {
-                    token: '1234',
-                    expiration: 1
-                }
+            expect(browser.driver.getCurrentUrl()).toBe('http://localhost:9999/index_e2e.html#/');
+        });
+
+        it('should send error if the user exists', function () {
+            backend.whenPOST(/user\/signup/).respond(function (method, url, data) {
+                return [400, {
+                    success: false
+                }];
             });
 
-            expect(browser.getCurrentUrl()).toBe('http://localhost:9999/#/');
+            fillForm('valid@email.org', '12345678');
+            btn.click();
+
+            alertDisplayed(true);
         });
-    });*/
+    });
 
 
 });

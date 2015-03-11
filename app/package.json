@@ -44,6 +44,6 @@
     "protractor": "latest",
     "gulp-protractor": "latest",
     "gulp-ng-config": "~1.0.0",
-    "http-backend-proxy": "1.4.*"
+    "httpbackend": "1.1.*"
   }
 }

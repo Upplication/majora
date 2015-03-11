@@ -139,7 +139,7 @@ gulp.task('protractor', ['webdriver_update'], function () {
         }));
 });
 
-gulp.task('test', ['default', 'test_index', 'vendor_mock', 'karma']);
+gulp.task('test', ['default', 'test_index', 'vendor_mock', 'karma', 'protractor']);
 
 gulp.task('test_unit', ['default', 'karma']);
 

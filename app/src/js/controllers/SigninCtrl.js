@@ -18,7 +18,6 @@
                     userService[m](self.data.email, self.data.password).then(function (token) {
                         self.error = false;
                         authService.storeToken(token);
-
                         $location.path('/');
                     }, function () {
                         self.error = true;
