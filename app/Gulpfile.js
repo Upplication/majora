@@ -37,7 +37,7 @@ gulp.task('js', function () {
     gulp.src('src/**/*.js')
         .pipe(concat('app.min.js'))
         .pipe(esnext())
-        .pipe(uglify())
+        //.pipe(uglify())
         .pipe(gulp.dest('dist/js'))
         .pipe(connect.reload());
 });
@@ -124,10 +124,12 @@ gulp.task('webdriver_update', webdriverUpdate);
 gulp.task('webdriver_standalone', ['webdriver_update'], webdriverStandalone);
 
 gulp.task('karma', function (done) {
-    karma.start({
-        configFile: __dirname + '/tests/karma.conf.js',
-        singleRun: true
-    }, done);
+    setTimeout(function () {
+        karma.start({
+            configFile: __dirname + '/tests/karma.conf.js',
+            singleRun: true
+        }, done);
+    }, 20000);
 });
 
 gulp.task('protractor', ['webdriver_update'], function () {
@@ -137,7 +139,7 @@ gulp.task('protractor', ['webdriver_update'], function () {
         }));
 });
 
-gulp.task('test', ['default', 'test_index', 'vendor_mock', 'karma', 'protractor']);
+gulp.task('test', ['default', 'test_index', 'vendor_mock', 'karma']);
 
 gulp.task('test_unit', ['default', 'karma']);
 
