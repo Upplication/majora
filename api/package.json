@@ -1,44 +1,45 @@
 {
-    "name" : "Majora",
-    "version" : "0.0.2",
-    "description" : "Templaters Manager Dashboard",
-    "main" : "index.js",
-    "scripts" : {
-        "start": "index.js",
-        "test" : "mocha"
-    },
-    "repository" : {
-        "type" : "git",
-        "url" : "https://github.com/Upplication/majora"
-    },
-    "keywords" : [
-        "templates",
-        "dashboard",
-        "api"
-    ],
-    "author" : "",
-    "license" : "MIT",
-    "bugs" : {
-        "url" : "https://github.com/Upplication/majora/issues"
-    },
-    "homepage" : "https://github.com/Upplication/majora",
-    "dependencies" : {
-        "express" : "4.11.*",
-        "q" : "1.1.*",
-        "lodash" : "2.4.*",
-        "winston" : "0.8.*",
-        "cookie-parser" : "~1.0.1",
-        "body-parser" : "~1.0.0",
-        "mongoose" : "3.6.*",
-        "rand-token": "0.2.*",
-        "bcrypt-nodejs": "0.0.3"
-    },
-    "devDependencies": {
-        "supertest": "0.7.*",
-        "mocha": "1.*",
-        "gulp": "latest",
-        "gulp-express": "latest",
-        "shelljs": "latest",
-        "mocha-mongoose": ""
-    }
+  "name": "Majora",
+  "version": "0.0.2",
+  "description": "Templaters Manager Dashboard",
+  "main": "index.js",
+  "scripts": {
+    "start": "index.js",
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Upplication/majora"
+  },
+  "keywords": [
+    "templates",
+    "dashboard",
+    "api"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Upplication/majora/issues"
+  },
+  "homepage": "https://github.com/Upplication/majora",
+  "dependencies": {
+    "express": "4.11.*",
+    "q": "1.1.*",
+    "lodash": "2.4.*",
+    "winston": "0.8.*",
+    "cookie-parser": "~1.0.1",
+    "body-parser": "~1.0.0",
+    "mongoose": "3.6.*",
+    "rand-token": "0.2.*",
+    "bcrypt-nodejs": "0.0.3"
+  },
+  "devDependencies": {
+    "gulp": "latest",
+    "gulp-express": "latest",
+    "mocha": "2.*",
+    "mocha-mongoose": "",
+    "shelljs": "latest",
+    "should": "^5.1.0",
+    "supertest": "0.7.*"
+  }
 }

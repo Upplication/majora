@@ -14,7 +14,7 @@ var templateSchema = new Schema({
 	name: String,
     author: String,
     snapshots: [String],
-    version: int
+    version: Number
 });
 
 /**
@@ -23,7 +23,12 @@ var templateSchema = new Schema({
  * @param {Function} callback Callback function
  */
 templateSchema.statics.findAll = function (callback) {
-    this.find(callback);
+    if (callback){
+        this.find().exec(callback);
+    }
+    else {
+        return this.find();
+    }
 };
 
 /**
