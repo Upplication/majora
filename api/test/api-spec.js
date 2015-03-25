@@ -116,14 +116,62 @@ describe('ApiController', function () {
             });
         });
     });
-    describe('/api/v1/templates/1', function () {
-        it('should return template 1 as JSON', function (done) {
+    describe('/api/v1/templates/leet', function () {
+
+        after(function(done) {
+           //clearDB(done);
+           done();
+        });
+
+
+        before(function(done) {
+               TemplateModel.create({name: "test-leet", author: "leet", version: 1}, function(){done()});
+        });
+
+        it('should return template as JSON', function (done) {
             request(app)
-                .get('/api/v1/templates/1')
+                .get('/api/v1/templates/leet')
                 .set('Accept', 'application/json')
                 .expect('Content-Type', /json/)
-                .expect({"message": "get template 1"})
                 .expect(200, done);
         });
+
+        describe('should return template by author leet', function(){
+            it('with field author equal to leet', function (done) {
+                request(app)
+                    .get('/api/v1/templates/leet')
+                    .set('Accept', 'application/json')
+                    .expect(200)
+                    .end(function(err, result){
+                        result.body.author.should.be.eql("leet");
+                        done();
+                    });
+            });
+
+            it('with field name', function (done) {
+                request(app)
+                    .get('/api/v1/templates/leet')
+                    .set('Accept', 'application/json')
+                    .expect(200)
+                    .end(function(err, result){
+                        result.body.name.should.be.eql("test-leet");
+                        done();
+                    });
+            });
+
+            it('without field _id and __v', function (done) {
+                request(app)
+                    .get('/api/v1/templates/leet')
+                    .set('Accept', 'application/json')
+                    .expect(200)
+                    .end(function(err, result){
+                        should.not.exist(result.body._id);
+                        should.not.exist(result.body.__v);
+                        done();
+                    });
+            });
+        });
+
+       
     });
 });

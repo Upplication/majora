@@ -17,11 +17,11 @@ v1.hello = function (req, res) {
  */
 v1.getTemplates = function(req, res) {
 	var deferred = q.defer();
-	TemplateModel.findAll()
-        .select('-_id') // exclude id
-        .select('-__v') // exclude version
-        .exec(function(err, results){
+	TemplateModel.findAll(function(err, results){
     		if (results) {
+                results.map(function(elem){
+                    return elem.toJson();
+                });
     			 deferred.resolve(results);
             } 
             else {
@@ -39,10 +39,28 @@ v1.getTemplates = function(req, res) {
     );
 };
 /**
- * TODO: jsdoc
+ * get a template by name
  */
 v1.getTemplate = function(req, res){
-	res.send({'message': 'get template ' + req.params.id});  
+
+	var deferred = q.defer();
+    TemplateModel.findByName(req.params.name, function(err, result){
+            if (result) {
+                deferred.resolve(result.toJson());
+            } 
+            else {
+                 deferred.reject(err);
+            }
+    });
+
+    deferred.promise.then(
+        function (result) {
+            res.send(result);
+        }, 
+        function () {
+            _sendError(res);
+        }
+    );
 };
 
 
