@@ -77,7 +77,7 @@ describe('e2e / signup', function () {
         it('should register the user', function () {
             backend.whenPOST(/user\/signup/).respond(function (method, url, data) {
                 return [200, {
-                    success: false,
+                    success: true,
                     token: {
                         token: '1234',
                         expiration: 1
