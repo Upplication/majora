@@ -1,6 +1,6 @@
 'use strict';
 
-describe('punishment-service_spec.js', function () {
+describe('userService', function () {
     var httpBackend, service;
 
     var VALID_EMAIL = 'valid@email.me',
