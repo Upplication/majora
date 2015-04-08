@@ -4,3 +4,4 @@
 app/dist/*
 app/vendor/*
 *.log
+api/coverage/*

@@ -12,6 +12,11 @@ before_script:
 - export DISPLAY=:99.0
 - sh -e /etc/init.d/xvfb start
 script: cd ../app && gulp test && cd ../api && npm test
+after_script:
+- npm install -g istanbul
+- npm install -g codeclimate-test-reporter
+- instanbul cover node_modules/.bin/_mocha
+- CODECLIMATE_REPO_TOKEN=26b909313e75f87119fa0af40ae5dbddf1fb8aefb7f3daea31401981d85d0b3a codeclimate < coverage/lcov.info
 deploy:
 - provider: s3
   skip_cleanup: true
