@@ -61,7 +61,7 @@ app.post('/user/login', UserController.login);
 // api router
 app.get('/api/v1/', ApiController.v1.hello);
 app.get('/api/v1/templates', ApiController.v1.getTemplates);
-app.get('/api/v1/templates/:id', ApiController.v1.getTemplate);
+app.get('/api/v1/templates/:name', ApiController.v1.getTemplate);
 
 
 

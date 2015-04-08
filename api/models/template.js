@@ -18,6 +18,18 @@ var templateSchema = new Schema({
 });
 
 /**
+ * return as a JSON without special mongo fields like _id and __v
+ */
+templateSchema.methods.toJson = function(){
+    this._id = undefined;
+    this.__v = undefined;
+    // dont work: http://stackoverflow.com/questions/4486926/delete-a-key-from-a-mongodb-document-using-mongoose
+    delete this['_id'];
+    delete this.__v;
+    return this;
+};
+
+/**
  * TODO: https://www.npmjs.com/package/mongoose-list
  * Finds all templates
  * @param {Function} callback Callback function
@@ -37,7 +49,7 @@ templateSchema.statics.findAll = function (callback) {
  * @param {Function} callback Callback function
  */
 templateSchema.statics.findByName = function (name, callback) {
-    this.find({name: new RegExp(name, 'i')}, callback);
+    this.findOne({name: new RegExp(name, 'i')}, callback);
 };
 
 
