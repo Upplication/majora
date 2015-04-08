@@ -29,6 +29,7 @@
     "winston": "0.8.*",
     "cookie-parser": "~1.0.1",
     "body-parser": "~1.0.0",
+    "micro-auth": "^0.8.7",
     "mongoose": "3.6.*",
     "rand-token": "0.2.*",
     "bcrypt-nodejs": "0.0.3"

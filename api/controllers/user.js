@@ -2,10 +2,20 @@
 
 var validators = require('../util/validators'),
     UserModel = require('../models/user'),
-    q = require('q'),
-    bcrypt = require('bcrypt-nodejs');
+    TokenModel = require('../models/token'),
+    q = require('q');
 
-var User = {};
+var User = {},
+    createToken = function (user, res) {
+        TokenModel.create(TokenModel.newToken(user._id), function (err, token) {
+            if (err) next(err);
+            res.send({
+                success: true,
+                token: token.token
+            });
+            
+        });
+    };
 
 // User signup
 User.signup = function (req, res) {
@@ -33,15 +43,11 @@ User.signup = function (req, res) {
     }
 
     deferred.promise.then(function () {
-        UserModel.create({email: form.email, password: bcrypt.hashSync(form.password), tokens: [UserModel.newToken()]},
+        UserModel.create({username: form.email, password: form.password},
             function (err, user) {
                 if (err) sendError();
-                var token = user.tokens[0];
-
-                res.status(201).send({
-                    success: true,
-                    token: token
-                });
+                res.status(201);
+                createToken(user, res);
             });
     }, function () {
         sendError();
@@ -58,35 +64,28 @@ User.login = function (req, res) {
         },
         deferred = q.defer();
 
-    if (form.email
-        && form.password) {
+    if (form.email && form.password) {
         UserModel.findByEmail(form.email, function (err, results) {
             if (!results || results.length === 0) {
+                console.log('user NOT finded');
                 deferred.reject();
             } else {
                 deferred.resolve(results[0]);
             }
         });
-    } else {
+    } 
+    else {
         deferred.reject();
     }
 
     deferred.promise.then(function (user) {
-        if (bcrypt.compareSync(form.password, user.password)) {
-            var token = UserModel.newToken();
-            user.tokens.push(token);
-
-            user.save(function (err) {
-                if (err) sendError();
-
-                res.send({
-                    success: true,
-                    token: token
-                });
-            });
-        } else {
+        if (user.passwordMatches(password)) {
+            createToken(user, res);
+        }
+        else {
             sendError();
         }
+
     }, function () {
         sendError();
     });
