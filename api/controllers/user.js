@@ -66,7 +66,6 @@ User.login = function (req, res) {
     if (form.email && form.password) {
         UserModel.findByEmail(form.email, function (err, results) {
             if (!results || results.length === 0) {
-                console.log('user NOT found');
                 deferred.reject();
             } else {
                 deferred.resolve(results[0]);
