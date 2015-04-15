@@ -10,17 +10,6 @@ var express = require('express'),
 var app = require('../app.js');
 
 describe('ApiController', function () {
-    describe('/api/v1/', function () {
-        it('should return hello world as JSON', function (done) {
-            request(app)
-                .get('/api/v1')
-                .set('Accept', 'application/json')
-                .expect('Content-Type', /json/)
-                .expect({"message": "hello world"})
-                .expect(200, done);
-        });
-    });
-
     describe('/api/v1/templates', function () {
          
         after(function(done) {
