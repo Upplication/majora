@@ -13,7 +13,6 @@ var User = {},
                 success: true,
                 token: token.token
             });
-            
         });
     };
 
@@ -67,25 +66,22 @@ User.login = function (req, res) {
     if (form.email && form.password) {
         UserModel.findByEmail(form.email, function (err, results) {
             if (!results || results.length === 0) {
-                console.log('user NOT finded');
+                console.log('user NOT found');
                 deferred.reject();
             } else {
                 deferred.resolve(results[0]);
             }
         });
-    } 
-    else {
+    } else {
         deferred.reject();
     }
 
     deferred.promise.then(function (user) {
-        if (user.passwordMatches(password)) {
+        if (user.passwordMatches(form.password)) {
             createToken(user, res);
-        }
-        else {
+        } else {
             sendError();
         }
-
     }, function () {
         sendError();
     });

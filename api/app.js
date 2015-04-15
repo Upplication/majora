@@ -38,12 +38,11 @@ app.use(Cors);
 mongoose.connect('mongodb://' + env.mongodb);
 
 // Dependency Injection middleware
-// Throught this middleware the dependencies are injected to the controllers
+// Through this middleware the dependencies are injected to the controllers
 app.use(function (req, res, next) {
     req.log = log;
     next();
 });
-
 
 // Add routes
 app.get('/', HomeController.main);
