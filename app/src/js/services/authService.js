@@ -28,8 +28,17 @@
             return undefined;
         };
 
+        /**
+         * Returns true if the user is logged in on the app, false otherwise
+         * @returns {boolean}
+         */
+        service.isLoggedIn = function () {
+            return service.getToken() !== undefined;
+        };
+
         return {
             getToken: service.getToken,
+            isLoggedIn: service.isLoggedIn,
             $get: function () {
                 return service;
             }
