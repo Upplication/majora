@@ -17,14 +17,14 @@ var express = require('express'),
     HomeController = require('./controllers/home'),
 
     log = new winston.Logger({
-        transports : [
+        transports: [
             new winston.transports.Console({
-                timestamp : true,
-                level : 'debug'
+                timestamp: true,
+                level: 'debug'
             }),
             new winston.transports.File({
-                filename : __dirname + '/logs/majora.log',
-                level : 'debug'
+                filename: __dirname + '/logs/majora.log',
+                level: 'debug'
             })
         ]
     }),
@@ -49,21 +49,16 @@ app.use(function (req, res, next) {
 app.get('/', HomeController.main);
 app.post('/user/signup', UserController.signup);
 app.post('/user/login', UserController.login);
-// some fake urls for auth testing
-app.get('/public', HomeController.main);
-app.get('/protected', auth, ApiController.v1.hello);
+
 // api router
-app.get('/api/v1/', ApiController.v1.hello);
 app.get('/api/v1/templates', ApiController.v1.getTemplates);
 app.get('/api/v1/templates/:name', ApiController.v1.getTemplate);
-
-
 
 // Serve
 var server = app.listen(process.env.PORT || 3000, function () {
     log.log(_.template('Majora started at http://<%= host %>:<%= port %>', {
-        host : server.address().address,
-        port : server.address().port
+        host: server.address().address,
+        port: server.address().port
     }));
 });
 
