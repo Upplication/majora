@@ -1,8 +1,8 @@
 (function (window, upp) {
     'use strict';
 
-    upp.controller('UploadTemplateCtrl', ['authService', '$location', 'templateService',
-        function (authService, $location, templateService) {
+    upp.controller('UploadTemplateCtrl', ['authService', '$location', 'templateService', '$scope',
+        function (authService, $location, templateService, $scope) {
             if (!authService.isLoggedIn()) {
                 $location.path('/user/login');
             }
@@ -14,20 +14,19 @@
                 name: '',
                 css: undefined
             };
+            this.error = false;
 
-            // TODO: accept => http://www.w3schools.com/jsref/prop_fileupload_accept.asp
-
-            this.$on('fileSelected:snapshots', function (e, args) {
+            $scope.$on('fileSelected:snapshots', function (e, args) {
                 self.data.snapshots.push(args.file);
-                if (!self.$$phase) {
-                    self.$digest();
+                if (!$scope.$$phase) {
+                    $scope.$digest();
                 }
             });
 
-            this.$on('fileSelected:css', function (e, args) {
+            $scope.$on('fileSelected:css', function (e, args) {
                 self.data.css = args.file;
-                if (!self.$$phase) {
-                    self.$digest();
+                if (!$scope.$$phase) {
+                    $scope.$digest();
                 }
             });
 
@@ -35,8 +34,8 @@
              * Is the form valid?
              * @returns {boolean}
              */
-            this.formValid = function () {
-                return self.data.name.trim().length > 4 && self.data.css && self.data.snapshots.length > 0;
+            this.isFormValid = function () {
+                return self.data.name && self.data.name.trim().length > 4 && self.data.css && self.data.snapshots.length > 0;
             };
 
             /**

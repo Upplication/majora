@@ -56,8 +56,6 @@ v1.getTemplate = function (req, res) {
 
 // FIXME: pass error to global error middleware
 var _sendError = function (res) {
-    console.log("error :/");
-    console.log(res);
     res.status(400).send({
         success: false
     });
