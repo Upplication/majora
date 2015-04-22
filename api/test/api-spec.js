@@ -76,34 +76,14 @@ describe('ApiController', function () {
         });
 
         describe('should return template by author leet', function () {
-            it('with field author equal to leet', function (done) {
+            it('with all its data', function (done) {
                 request(app)
                     .get('/api/v1/templates/leet')
                     .set('Accept', 'application/json')
                     .expect(200)
                     .end(function (err, result) {
                         result.body.author.should.be.eql("leet");
-                        done();
-                    });
-            });
-
-            it('with field name', function (done) {
-                request(app)
-                    .get('/api/v1/templates/leet')
-                    .set('Accept', 'application/json')
-                    .expect(200)
-                    .end(function (err, result) {
                         result.body.name.should.be.eql("test-leet");
-                        done();
-                    });
-            });
-
-            it('without field _id and __v', function (done) {
-                request(app)
-                    .get('/api/v1/templates/leet')
-                    .set('Accept', 'application/json')
-                    .expect(200)
-                    .end(function (err, result) {
                         should.not.exist(result.body._id);
                         should.not.exist(result.body.__v);
                         done();
