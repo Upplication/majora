@@ -1,6 +1,7 @@
 'use strict';
 
 var mongoose = require('mongoose'),
+    mongooseList = require('mongoose-list'),
     Schema = mongoose.Schema;
 
 /**
@@ -14,8 +15,12 @@ var templateSchema = new Schema({
     name: String,
     author: String,
     snapshots: [String],
-    version: Number
+    version: Number,
+    created: {type: Date, 'default': Date.now},
+    updated: Date
 });
+
+mongoose.plugin(mongooseList);
 
 /**
  * Returns the template as JSON with only the required fields
@@ -25,21 +30,20 @@ templateSchema.methods.toJson = function () {
         name: this.name,
         snapshots: this.snapshots,
         version: this.version,
-        author: this.author
+        author: this.author,
+        created: this.created,
+        updated: this.updated
     };
 };
 
 /**
- * TODO: https://www.npmjs.com/package/mongoose-list
- * Finds all templates
- * @param {Function} callback Callback function
+ * Finds a paginated list of templates
+ * @param {Number} page Page number
+ * @param {Number} num  Number of items per page
+ * @param {Function} callback Callback
  */
-templateSchema.statics.findAll = function (callback) {
-    if (callback) {
-        this.find().exec(callback);
-    } else {
-        return this.find();
-    }
+templateSchema.statics.findByPage = function (page, num, callback) {
+    this.list({start: (page - 1) * num, limit: num, sort: 'created'}, callback);
 };
 
 /**

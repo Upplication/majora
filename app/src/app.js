@@ -15,6 +15,9 @@
                 .when('/template/add', {
                     templateUrl: 'new-template.html'
                 })
+                .when('/template/list/:page?', {
+                    templateUrl: 'list-templates.html'
+                })
                 .otherwise({
                     redirectTo: '/'
                 });

@@ -31,6 +31,7 @@
     "body-parser": "~1.0.0",
     "micro-auth": "^0.8.7",
     "mongoose": "3.6.*",
+    "mongoose-list": "0.2.*",
     "rand-token": "0.2.*"
   },
   "devDependencies": {

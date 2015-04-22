@@ -6,29 +6,22 @@ var TemplateModel = require('../models/template'),
 var v1 = {};
 
 /**
- * Retrieve all templates.
+ * Retrieves a page of templates
+ * @param req
+ * @param res
  */
 v1.getTemplates = function (req, res) {
-    var deferred = q.defer();
-    TemplateModel.findAll(function (err, results) {
-        if (results) {
-            results.map(function (elem) {
-                return elem.toJson();
-            });
-            deferred.resolve(results);
-        } else {
-            deferred.reject(err);
-        }
-    });
+    TemplateModel.findByPage(req.query.page || 1, req.query.max || 25, function (err, count, results) {
+        if (err) _sendError(res);
 
-    deferred.promise.then(
-        function (results) {
-            res.send(results);
-        },
-        function () {
-            _sendError(res);
-        }
-    );
+        res.send({
+            page: req.query.page,
+            count: count,
+            templates: results.map(function (t) {
+                return t.toJson();
+            })
+        });
+    });
 };
 
 /**
