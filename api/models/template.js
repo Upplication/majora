@@ -1,12 +1,13 @@
 'use strict';
 
 var mongoose = require('mongoose'),
+    mongooseList = require('mongoose-list'),
     Schema = mongoose.Schema;
 
 /**
  * Template with:
  * - name (string)
- * - snapshots (list urls)
+ * - snapshots (urls list)
  * - version (int)
  * - author (reference author username)
  */
@@ -16,40 +17,41 @@ var templateSchema = new Schema({
     author: String,
     css: String,
     snapshots: [String],
-    version: Number
+    version: Number,
+    created: {type: Date, 'default': Date.now},
+    updated: Date
 });
 
-/**
- * return as a JSON without special mongo fields like _id and __v
- */
-templateSchema.methods.toJson = function(){
-    this._id = undefined;
-    this.__v = undefined;
-    // dont work: http://stackoverflow.com/questions/4486926/delete-a-key-from-a-mongodb-document-using-mongoose
-    delete this['_id'];
-    delete this.__v;
+mongoose.plugin(mongooseList);
 
-    return this;
+/**
+ * Returns the template as JSON with only the required fields
+ */
+templateSchema.methods.toJson = function () {
+    return {
+        name: this.name,
+        snapshots: this.snapshots,
+        version: this.version,
+        author: this.author,
+        created: this.created,
+        updated: this.updated
+    };
 };
 
 /**
- * TODO: https://www.npmjs.com/package/mongoose-list
- * Finds all templates
- * @param {Function} callback Callback function
+ * Finds a paginated list of templates
+ * @param {Number} page Page number
+ * @param {Number} num  Number of items per page
+ * @param {Function} callback Callback
  */
-templateSchema.statics.findAll = function (callback) {
-    if (callback){
-        this.find().exec(callback);
-    }
-    else {
-        return this.find();
-    }
+templateSchema.statics.findByPage = function (page, num, callback) {
+    this.list({start: (page - 1) * num, limit: num, sort: 'created'}, callback);
 };
 
 
 /**
- * Finds a unique template with the given name
- * @param {String}   name    Name
+ * Finds a template with the given name
+ * @param {String}   name     Name
  * @param {Function} callback Callback function
  */
 templateSchema.statics.findByName = function (name, callback) {
@@ -64,6 +66,5 @@ templateSchema.statics.findByName = function (name, callback) {
 templateSchema.statics.findByAuthorName = function (name, callback) {
     this.find({author: new RegExp(name, 'i')}, callback);
 };
-
 
 module.exports = mongoose.model('Template', templateSchema);

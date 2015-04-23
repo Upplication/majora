@@ -11,7 +11,7 @@ var User = {},
             if (err) next(err);
             res.send({
                 success: true,
-                token: token.token
+                token: token.toJson()
             });
         });
     };

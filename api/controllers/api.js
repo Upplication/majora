@@ -6,11 +6,10 @@ var TemplateModel = require('../models/template'),
 var v1 = {};
 
 /**
- * Retrieve all templates.
+ * Retrieve a page of templates.
  * Retrieve templates by author if param authorUserName are present
  */
 v1.getTemplates = function (req, res) {
-    var deferred = q.defer();
 
     if (req.params.authorName){
         TemplateModel.findByAuthorName(req.params.authorUserName, function (err, results) {
@@ -18,34 +17,25 @@ v1.getTemplates = function (req, res) {
                 results.map(function (elem) {
                     return elem.toJson();
                 });
-                deferred.resolve(results);
-            } else {
-                deferred.reject(err);
-            }
+                res.send(results);
+            } 
+            else _sendError(res);
         });
     }
     else {
-        TemplateModel.findAll(function (err, results) {
-            if (results) {
-                results.map(function (elem) {
-                    return elem.toJson();
-                });
-                deferred.resolve(results);
-            } else {
-                deferred.reject(err);
-            }
-        });
-    }
+         TemplateModel.findByPage(req.query.page || 1, req.query.max || 25, function (err, count, results) {
+            if (err) _sendError(res);
 
-    deferred.promise.then(
-        function (results) {
-            res.send(results);
-        },
-        function () {
-            _sendError(res);
-        }
-    );
-};
+            res.send({
+                page: req.query.page,
+                count: count,
+                templates: results.map(function (t) {
+                    return t.toJson();
+                })
+            });
+         });
+    }
+}
 
 /**
  * Get a template by name
@@ -72,8 +62,6 @@ v1.getTemplate = function (req, res) {
 
 // FIXME: pass error to global error middleware
 var _sendError = function (res) {
-    console.log("error :/");
-    console.log(res);
     res.status(400).send({
         success: false
     });

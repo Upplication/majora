@@ -3,6 +3,10 @@
 
     upp.controller('SigninCtrl', ['userService', 'authService', '$location',
         function (userService, authService, $location) {
+            if (authService.isLoggedIn()) {
+                $location.path('/');
+            }
+
             this.data = {
                 email: '',
                 password: ''

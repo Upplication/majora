@@ -12,10 +12,8 @@ var app = require('../app.js');
 
 describe('ApiController', function () {
     describe('/api/v1/templates', function () {
-         
-        after(function(done) {
-           //clearDB(done);
-           done();
+        after(function (done) {
+            done();
         });
 
         it('should return templates as JSON', function (done) {
@@ -27,18 +25,16 @@ describe('ApiController', function () {
         });
 
         describe('without templates', function () {
-
-            it ('should return empty JSON', function(done){
+            it('should return empty JSON', function (done) {
                 request(app)
-                 .get('/api/v1/templates')
+                    .get('/api/v1/templates?page=1&max=25')
                     .set('Accept', 'application/json')
-                    .expect({})
+                    .expect({count: 0, page: 1, templates: []})
                     .expect(200, done);
             });
         });
 
         describe('with templates', function () {
-
             before(function(done) {
                 UserModel.create({username: "test@test.es", password: "1234"}, function(err, user) {
                     TemplateModel.create({name: "test", author: user.username, version: 1}, function(err, template){
@@ -56,7 +52,7 @@ describe('ApiController', function () {
                     .set('Accept', 'application/json')
                     .expect(200)
                     .end(function(err, result){
-                        result.body.should.be.instanceOf(Array);
+                        result.body.templates.should.be.instanceOf(Array);
                         done();
                     });
             });
@@ -66,7 +62,7 @@ describe('ApiController', function () {
                     .set('Accept', 'application/json')
                     .expect(200)
                     .end(function(err, result){
-                        result.body[0].name.should.be.eql("test");
+                        result.body.templates[0].name.should.be.eql("test");
                         done();
                     });
             });
@@ -76,7 +72,7 @@ describe('ApiController', function () {
                     .set('Accept', 'application/json')
                     .expect(200)
                     .end(function(err, result){
-                        result.body[0].author.should.be.eql("test@test.es");
+                        result.body.templates[0].author.should.be.eql("test@test.es");
                         done();
                     });
             });
@@ -86,7 +82,7 @@ describe('ApiController', function () {
                     .set('Accept', 'application/json')
                     .expect(200)
                     .end(function(err, result){
-                        result.body[0].version.should.be.eql(1);
+                        result.body.templates[0].version.should.be.eql(1);
                         done();
                     });
             });
@@ -96,23 +92,25 @@ describe('ApiController', function () {
                     .set('Accept', 'application/json')
                     .expect(200)
                     .end(function(err, result){
-                        should.not.exist(result.body[0]._id);
+                        should.not.exist(result.body.templates[0]._id);
                         done();
                     });
+
             });
 
-            it ('dont should return array templates with __v', function(done){
+            it('should return page counter', function (done) {
                 request(app)
-                 .get('/api/v1/templates')
+                    .get('/api/v1/templates?page=1&max=25')
                     .set('Accept', 'application/json')
                     .expect(200)
-                    .end(function(err, result){
-                        should.not.exist(result.body[0].__v);
+                    .end(function (err, result) {
+                        result.body.count.should.be.not.null;
                         done();
                     });
             });
         });
     });
+
     describe('/api/v1/templates/test@test.com', function () {
 
         after(function(done) {
@@ -136,6 +134,7 @@ describe('ApiController', function () {
                 .expect(200, done);
         });
 
+
         describe('should return template by author test@test.com', function(){
             it('with field author equal to test@test.com', function (done) {
                 request(app)
@@ -143,7 +142,7 @@ describe('ApiController', function () {
                     .set('Accept', 'application/json')
                     .expect(200)
                     .end(function(err, result){
-                        result.body[0].author.should.be.eql("test@test.com");
+                        result.body.templates[0].author.should.be.eql("test@test.com");
                         done();
                     });
             });
@@ -154,7 +153,7 @@ describe('ApiController', function () {
                     .set('Accept', 'application/json')
                     .expect(200)
                     .end(function(err, result){
-                        result.body[0].name.should.be.eql("test-leet");
+                        result.body.templates[0].name.should.be.eql("test-leet");
                         done();
                     });
             });
@@ -165,8 +164,8 @@ describe('ApiController', function () {
                     .set('Accept', 'application/json')
                     .expect(200)
                     .end(function(err, result){
-                        should.not.exist(result.body[0]._id);
-                        should.not.exist(result.body[0].__v);
+                        should.not.exist(result.body.templates[0]._id);
+                        should.not.exist(result.body.templates[0].__v);
                         done();
                     });
             });

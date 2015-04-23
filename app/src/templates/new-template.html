@@ -1,0 +1,40 @@
+<div class="container" data-ng-controller="UploadTemplateCtrl as upload">
+    <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="panel-title">Add a new template</div>
+            </div>
+
+            <div class="panel-body">
+                <div id="login-alert" class="alert alert-danger col-sm-12" data-ng-show="upload.error">
+                    An error occurred, please check the data and try again.
+                </div>
+
+                <form id="uploadForm" class="form-horizontal" name="uploadForm" role="form" novalidate>
+                    <div>
+                        <label for="name">Template name</label>
+                        <input id="name" type="text" class="form-control" data-ng-model="upload.data.name"
+                               name="name" placeholder="Name of your template..." minlength="5" maxlength="200" required>
+                    </div>
+
+                    <div>
+                        <label for="css">Template CSS</label>
+                        <input id="css" type="file" class="form-control" data-file-upload="css"
+                               name="css" accept="text/css" required>
+                    </div>
+
+                    <div>
+                        <label for="snapshots">Template Snapshots</label>
+                        <input id="snapshots" type="file" class="form-control" data-file-upload="snapshots"
+                               name="snapshots" accept="image/*" multiple required>
+                    </div>
+
+                    <div class="col-sm-12 controls form-group margin-top-1em">
+                        <button id="btn-add-tpl" class="btn btn-primary" data-ng-click="upload.submit();"
+                                data-ng-disabled="!upload.isFormValid()">Add template</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -8,11 +8,17 @@
             $routeProvider.
                 when('/user/login', {
                     templateUrl: 'login.html'
-                }).
-                when('/user/signup', {
+                })
+                .when('/user/signup', {
                     templateUrl: 'signup.html'
-                }).
-                otherwise({
+                })
+                .when('/template/add', {
+                    templateUrl: 'new-template.html'
+                })
+                .when('/template/list/:page?', {
+                    templateUrl: 'list-templates.html'
+                })
+                .otherwise({
                     redirectTo: '/'
                 });
 
