@@ -23,15 +23,17 @@
   },
   "homepage": "https://github.com/Upplication/majora",
   "dependencies": {
-    "express": "4.11.*",
-    "q": "1.1.*",
-    "lodash": "2.4.*",
-    "winston": "0.8.*",
-    "cookie-parser": "~1.0.1",
+    "aws-sdk": "^2.1.24",
     "body-parser": "~1.0.0",
+    "cookie-parser": "~1.0.1",
+    "express": "4.11.*",
+    "lodash": "2.4.*",
     "micro-auth": "^0.8.7",
     "mongoose": "3.6.*",
-    "rand-token": "0.2.*"
+    "multer": "^0.1.8",
+    "q": "1.1.*",
+    "rand-token": "0.2.*",
+    "winston": "0.8.*"
   },
   "devDependencies": {
     "gulp": "latest",
@@ -40,6 +42,6 @@
     "mocha-mongoose": "",
     "shelljs": "latest",
     "should": "^5.1.0",
-    "supertest": "0.7.*"
+    "supertest": "0.9.*"
   }
 }

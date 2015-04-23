@@ -7,19 +7,35 @@ var v1 = {};
 
 /**
  * Retrieve all templates.
+ * Retrieve templates by author if param authorUserName are present
  */
 v1.getTemplates = function (req, res) {
     var deferred = q.defer();
-    TemplateModel.findAll(function (err, results) {
-        if (results) {
-            results.map(function (elem) {
-                return elem.toJson();
-            });
-            deferred.resolve(results);
-        } else {
-            deferred.reject(err);
-        }
-    });
+
+    if (req.params.authorName){
+        TemplateModel.findByAuthorName(req.params.authorUserName, function (err, results) {
+            if (results) {
+                results.map(function (elem) {
+                    return elem.toJson();
+                });
+                deferred.resolve(results);
+            } else {
+                deferred.reject(err);
+            }
+        });
+    }
+    else {
+        TemplateModel.findAll(function (err, results) {
+            if (results) {
+                results.map(function (elem) {
+                    return elem.toJson();
+                });
+                deferred.resolve(results);
+            } else {
+                deferred.reject(err);
+            }
+        });
+    }
 
     deferred.promise.then(
         function (results) {

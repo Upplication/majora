@@ -3,7 +3,8 @@
 var express = require('express'),
     mongoose = require('mongoose'),
     TemplateModel = require("../models/template"),
-    clearDB = require('./utils'),
+    UserModel = require("../models/user"),
+    utils = require('./utils'),
     should = require("should"),
     request = require('supertest');
 
@@ -39,7 +40,14 @@ describe('ApiController', function () {
         describe('with templates', function () {
 
             before(function(done) {
-               TemplateModel.create({name: "test", author: "test", version: 1}, function(){done()});
+                UserModel.create({username: "test@test.es", password: "1234"}, function(err, user) {
+                    TemplateModel.create({name: "test", author: user.username, version: 1}, function(err, template){
+                        done()});
+                })
+            });
+
+            after(function(done) {
+                utils.clearDb(done);
             });
 
             it ('should return array templates', function(done){
@@ -68,7 +76,7 @@ describe('ApiController', function () {
                     .set('Accept', 'application/json')
                     .expect(200)
                     .end(function(err, result){
-                        result.body[0].author.should.be.eql("test");
+                        result.body[0].author.should.be.eql("test@test.es");
                         done();
                     });
             });
@@ -105,62 +113,63 @@ describe('ApiController', function () {
             });
         });
     });
-    describe('/api/v1/templates/leet', function () {
+    describe('/api/v1/templates/test@test.com', function () {
 
         after(function(done) {
-           //clearDB(done);
-           done();
+           utils.clearDb(done);
         });
 
 
         before(function(done) {
-               TemplateModel.create({name: "test-leet", author: "leet", version: 1}, function(){done()});
+            UserModel.create({username: "test@test.com", password: "1234"}, function(err, user) {
+                TemplateModel.create({name: "test-leet", author: user.username, version: 1}, function(err, template){
+                    done();
+                });
+            });
         });
 
         it('should return template as JSON', function (done) {
             request(app)
-                .get('/api/v1/templates/leet')
+                .get('/api/v1/templates/test@test.com')
                 .set('Accept', 'application/json')
                 .expect('Content-Type', /json/)
                 .expect(200, done);
         });
 
-        describe('should return template by author leet', function(){
-            it('with field author equal to leet', function (done) {
+        describe('should return template by author test@test.com', function(){
+            it('with field author equal to test@test.com', function (done) {
                 request(app)
-                    .get('/api/v1/templates/leet')
+                    .get('/api/v1/templates/test@test.com')
                     .set('Accept', 'application/json')
                     .expect(200)
                     .end(function(err, result){
-                        result.body.author.should.be.eql("leet");
+                        result.body[0].author.should.be.eql("test@test.com");
                         done();
                     });
             });
 
             it('with field name', function (done) {
                 request(app)
-                    .get('/api/v1/templates/leet')
+                    .get('/api/v1/templates/test@test.com')
                     .set('Accept', 'application/json')
                     .expect(200)
                     .end(function(err, result){
-                        result.body.name.should.be.eql("test-leet");
+                        result.body[0].name.should.be.eql("test-leet");
                         done();
                     });
             });
 
             it('without field _id and __v', function (done) {
                 request(app)
-                    .get('/api/v1/templates/leet')
+                    .get('/api/v1/templates/test@test.com')
                     .set('Accept', 'application/json')
                     .expect(200)
                     .end(function(err, result){
-                        should.not.exist(result.body._id);
-                        should.not.exist(result.body.__v);
+                        should.not.exist(result.body[0]._id);
+                        should.not.exist(result.body[0].__v);
                         done();
                     });
             });
         });
-
-       
     });
 });
