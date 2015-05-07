@@ -1,16 +1,34 @@
 (function (window, upp) {
     'use strict';
 
-    upp.controller('UploadTemplateCtrl', ['templateService', '$routeParams',
+    upp.controller('ListTemplatesCtrl', ['templateService', '$routeParams',
         function (templateService, $routeParams) {
             this.loading = true;
+            this.templates = [];
+            this.page = $routeParams.page || 1;
 
-            templateService.list($routeParams.page || 1).then(function (templates) {
-                // TODO: Next page
-                // TODO: Pagination
-                this.loading = false;
-                this.templates = templates;
-            }.bind(this));
+            /**
+             * Load the page
+             */
+            var loadPage = function () {
+                templateService.list(this.page).then(function (data) {
+                    this.loading = false;
+                    this.templates = data.templates;
+                    this.hasNextPage = data.next;
+                    this.hasPrevPage = data.prev;
+                }.bind(this));
+            }.bind(this);
+
+            loadPage();
+
+            /**
+             * Changes the current active page and loads the corresponding templates
+             * @param {Number} page Page number
+             */
+            this.changePage = function (page) {
+                this.page = page;
+                loadPage();
+            };
         }
     ]);
 

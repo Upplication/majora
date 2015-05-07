@@ -18,5 +18,5 @@ module.exports = function (req, res, next) {
     } else {
         auth(req, res, next);
     }
-}
+};
 

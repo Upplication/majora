@@ -18,6 +18,9 @@
                 .when('/template/list/:page?', {
                     templateUrl: 'list-templates.html'
                 })
+                .when('/template/:name', {
+                    templateUrl: 'view-template.html'
+                })
                 .otherwise({
                     redirectTo: '/'
                 });

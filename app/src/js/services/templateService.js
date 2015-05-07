@@ -46,11 +46,15 @@
          * @return {promise}
          */
         service.list = function (page) {
-            $http.get(endpoint + '/templates?page=' + page).then(function (response) {
-                deferred.resolve(response.data.templates);
+            var deferred = $q.defer();
+
+            $http.get(endpoint + '/api/v1/templates?page=' + page).then(function (response) {
+                deferred.resolve(response.data);
             }, function (err) {
                 deferred.reject(err);
             });
+
+            return deferred.promise;
         };
 
         return service;
