@@ -10,32 +10,37 @@ var v1 = {};
  * Retrieve templates by author if param authorUserName are present
  */
 v1.getTemplates = function (req, res) {
+    var page = req.query.page || 1,
+        max = req.query.max || 25;
 
-    if (req.params.authorName){
+    if (req.params.authorName) {
         TemplateModel.findByAuthorName(req.params.authorUserName, function (err, results) {
             if (results) {
                 results.map(function (elem) {
                     return elem.toJson();
                 });
                 res.send(results);
-            } 
+            }
             else _sendError(res);
         });
-    }
-    else {
-         TemplateModel.findByPage(req.query.page || 1, req.query.max || 25, function (err, count, results) {
+    } else {
+        TemplateModel.findByPage(page, max, function (err, count, results) {
             if (err) _sendError(res);
 
-            res.send({
-                page: req.query.page,
-                count: count,
-                templates: results.map(function (t) {
-                    return t.toJson();
-                })
+            TemplateModel.count(function (err, c) {
+                res.send({
+                    page: req.query.page,
+                    count: count,
+                    next: c > (count + (page - 1) * max),
+                    prev: page > 1,
+                    templates: results.map(function (t) {
+                        return t.toJson();
+                    })
+                });
             });
-         });
+        });
     }
-}
+};
 
 /**
  * Get a template by name
