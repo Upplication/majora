@@ -40,6 +40,19 @@
             return deferred.promise;
         };
 
+        /**
+         * Retrieves a list of templates for the given page
+         * @param {Number} page Page number
+         * @return {promise}
+         */
+        service.list = function (page) {
+            $http.get(endpoint + '/templates?page=' + page).then(function (response) {
+                deferred.resolve(response.data.templates);
+            }, function (err) {
+                deferred.reject(err);
+            });
+        };
+
         return service;
     }]);
 
