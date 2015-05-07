@@ -59,7 +59,7 @@ app.get('/api/v1/templates/:authorUserName', ApiController.v1.getTemplates);
 app.get('/api/v1/template/:name', ApiController.v1.getTemplate);
 
 // template routes
-app.post('/template/create', auth, TemplateController.create);
+app.post('/templates/create', auth, TemplateController.create);
 
 // Serve
 var server = app.listen(process.env.PORT || 3000, function () {

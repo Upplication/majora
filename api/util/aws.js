@@ -20,6 +20,7 @@ module.exports = {
             Key: path + '/' + name,
             Body: body
         };
+        console.log(params);
         awsS3.upload(params, callback);
 	}
 };

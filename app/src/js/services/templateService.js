@@ -9,7 +9,7 @@
 
             $http({
                 method: 'POST',
-                url: endpoint + '/template/new',
+                url: endpoint + '/templates/create',
                 headers: {
                     'Content-Type': undefined
                 },
