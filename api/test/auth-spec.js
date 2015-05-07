@@ -2,7 +2,6 @@
 
 var express = require('express'),
     request = require('supertest'),
-    HomeController = require('../controllers/home'),
     auth = require('../middlewares/auth');
 
 var app = require('../app.js');
@@ -41,6 +40,7 @@ describe('Auth Checker', function () {
         });
 
         describe('when the url are private', function () {
+
             it('like \'/protected\' with valid token then should return 200', function (done) {
                 doRequest('/protected', 'Bearer: valid-token')
                     .expect(200, done);

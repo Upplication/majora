@@ -9,8 +9,11 @@ var express = require('express'),
     bodyParser = require('body-parser'),
     mongoose = require('mongoose'),
     env = require('./config'),
-    Cors = require('./middlewares/cors.js'),
+    // middlewares
+    cors = require('./middlewares/cors.js'),
     auth = require('./middlewares/auth'),
+    multer  = require('./middlewares/multer'),
+    // controllers
     UserController = require('./controllers/user'),
     ApiController = require('./controllers/api'),
     TemplateController = require('./controllers/template'),
@@ -33,7 +36,8 @@ var express = require('express'),
 // Add middlewares
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use(Cors);
+app.use(cors);
+app.use(multer);
 
 mongoose.connect('mongodb://' + env.mongodb);
 
@@ -51,7 +55,11 @@ app.post('/user/login', UserController.login);
 
 // api router
 app.get('/api/v1/templates', ApiController.v1.getTemplates);
-app.get('/api/v1/templates/:name', ApiController.v1.getTemplate);
+app.get('/api/v1/templates/:authorUserName', ApiController.v1.getTemplates);
+app.get('/api/v1/template/:name', ApiController.v1.getTemplate);
+
+// template routes
+app.post('/template/create', auth, TemplateController.create);
 
 // Serve
 var server = app.listen(process.env.PORT || 3000, function () {

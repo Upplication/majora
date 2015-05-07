@@ -9,11 +9,13 @@ var mongoose = require('mongoose'),
  * - name (string)
  * - snapshots (urls list)
  * - version (int)
- * - author (reference email)
+ * - author (reference author username)
  */
 var templateSchema = new Schema({
-    name: String,
+	name: String,
+    // author username
     author: String,
+    css: String,
     snapshots: [String],
     version: Number,
     created: {type: Date, 'default': Date.now},
@@ -46,6 +48,7 @@ templateSchema.statics.findByPage = function (page, num, callback) {
     this.list({start: (page - 1) * num, limit: num, sort: 'created'}, callback);
 };
 
+
 /**
  * Finds a template with the given name
  * @param {String}   name     Name
@@ -53,6 +56,15 @@ templateSchema.statics.findByPage = function (page, num, callback) {
  */
 templateSchema.statics.findByName = function (name, callback) {
     this.findOne({name: new RegExp(name, 'i')}, callback);
+};
+
+/**
+ * Finds a list of template with the given author name (username)
+ * @param {String}   name    Name
+ * @param {Function} callback Callback function
+ */
+templateSchema.statics.findByAuthorName = function (name, callback) {
+    this.find({author: new RegExp(name, 'i')}, callback);
 };
 
 module.exports = mongoose.model('Template', templateSchema);
