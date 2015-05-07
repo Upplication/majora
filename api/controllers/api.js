@@ -29,7 +29,7 @@ v1.getTemplates = function (req, res) {
 
             TemplateModel.count(function (err, c) {
                 res.send({
-                    page: req.query.page,
+                    page: page,
                     count: count,
                     next: c > (count + (page - 1) * max),
                     prev: page > 1,

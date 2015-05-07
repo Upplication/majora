@@ -28,7 +28,7 @@ describe('Cors', function () {
 
         it('Access-Control-Allow-Headers equal to Origin, X-Requested-With, Content-Type, Accept', function (done) {
             doRequest()
-                .expect('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
+                .expect('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization')
                 .expect(200, done);
         });
 
