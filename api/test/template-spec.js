@@ -99,7 +99,7 @@ describe('TemplateController', function () {
                             data.author.should.be.eql('test@test.es');
 
                             done();
-                        })
+                        });
                     });
             });
         });
