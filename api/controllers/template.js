@@ -5,16 +5,23 @@ var validators = require('../util/validators'),
     aws = require('../util/aws'),
     q = require('q');
 
-var Template = {};
-
-Template.create = function (req, res) {
-    var form = req.body,
-        images = req.files.files,
-        sendError = function (e) {
+var Template = {},
+    sendError = function (e) {
             res.status(400).send({
                 success: false
             });
-        },
+    };
+/**
+ * Create a new template with version 1 if:
+ * - name unique and valid as url
+ * - css mandatory
+ * - images unique and valid
+ * if fail return 400
+ * if ok: return 201
+ */
+Template.create = function (req, res) {
+    var form = req.body,
+        images = req.files.files,
         deferred = q.defer();
     // name should be valid as path in the url!!!!
     if (form.name
@@ -42,7 +49,7 @@ Template.create = function (req, res) {
             nextDefer.resolve(data.Location);
         });
 
-        return nextDefer.promise;;
+        return nextDefer.promise;
     })
     // create
     .then(function(imageUrl){
@@ -54,7 +61,57 @@ Template.create = function (req, res) {
     })
     .fail(sendError)
     .done();
+};
+/**
+ * get a template or get 404
+ */
+Template.get = function (req, res) {
+    TemplateModel.findByName(req.params.name, function(err, template){
+        if (err) sendError();
+        if (template) {
+            res.status(200);
+            res.send(template.toJson());
+        }
+        else {
+            res.status(404).send();
+        }
+    });
+};
+/**
+ * update the css and the logo
+ */
+Template.update = function (req, res) {
+    var deferred = q.defer();
 
+
+    if (req.files.files ||
+        req.files.files.length < 1) {
+        sendError();
+    }
+    
+    TemplateModel.findByName(req.params.name, function(err, template){
+        if (err) deferred.reject();
+        if (template) {
+            deferred.resolve(template);
+        }
+        else {
+            res.status(404).send();
+        }
+    });
+
+    // update
+    deferred.promise.then(function (template) {
+        var nextDefer = q.defer();
+        // update
+        template.version = template.version + 1;
+
+               
+        res.status(200);
+        res.send({});
+    })
+    .fail(sendError)
+    .done();
+    
 };
 
 module.exports = Template;

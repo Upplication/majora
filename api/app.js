@@ -60,6 +60,9 @@ app.get('/api/v1/template/:name', ApiController.v1.getTemplate);
 
 // template routes
 app.post('/template/create', auth, TemplateController.create);
+app.get('/template/:name', auth, TemplateController.get);
+app.put('/template/:name', auth, TemplateController.update);
+
 
 // Serve
 var server = app.listen(process.env.PORT || 3000, function () {

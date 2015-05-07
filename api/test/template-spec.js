@@ -4,6 +4,7 @@ var express = require('express'),
     request = require('supertest'),
     TemplateController = require('../controllers/template'),
     TemplateModel = require("../models/template"),
+    UserModel = require("../models/user"),
     aws = require('../util/aws'),
     should = require('should'),
     assert = require('assert'),
@@ -69,7 +70,7 @@ describe('TemplateController', function () {
 
         describe('when all fields are provided', function () {
             it('should return 201', function (done) {
-                this.timeout(100000);
+                this.timeout(10000);
                 request(app)
                     .post('/test/template/create')
                     .set('Accept', 'application/json')
@@ -81,7 +82,7 @@ describe('TemplateController', function () {
             });
 
              it('should create a template in mongo', function (done) {
-                this.timeout(100000);
+                this.timeout(10000);
                 request(app)
                     .post('/test/template/create')
                     .set('Accept', 'application/json')
@@ -108,5 +109,68 @@ describe('TemplateController', function () {
                     });
             });
         });
+    });
+
+app.get('/test/template/:name', mockAuth, TemplateController.get);
+
+describe('get', function () {
+        
+        before(function (done) {
+            utils.clearDb(done);
+        });
+        
+        describe('when no name are provided', function () {
+            it('should return status 404', function (done) {
+                request(app)
+                    .get('/test/template/')
+                    .set('Accept', 'application/json')
+                    .expect(404, done);
+            });
+        });
+
+        describe('when name exists', function () {
+            before(function (done) {
+                UserModel.create({username: "test2@test2.es", password: "1234"}, function(err, user) {
+                    TemplateModel.create({name: "template-test", author: user.username, version: 1}, function(err, template) {
+                        done();
+                    });
+                });
+            });
+
+            it('should return status 200', function (done) {
+                request(app)
+                    .get('/test/template/template-test')
+                    .set('Accept', 'application/json')
+                    .expect('Content-Type', /json/)
+                    .expect(200, done);
+            });
+
+            it('should return template with name', function (done) {
+                request(app)
+                    .get('/test/template/template-test')
+                    .end(function(err, result){
+                        result.body.name.should.be.eql("template-test");
+                        done();
+                    });
+            });
+
+            it('should return template with author', function (done) {
+                request(app)
+                    .get('/test/template/test')
+                    .end(function(err, result){
+                        result.body.author.should.be.eql("test2@test2.es");
+                        done();
+                    });
+            });
+        });
+
+        describe('when name not exists', function () {
+            it('should return status 404', function (done) {
+                request(app)
+                    .get('/test/template/pepito')
+                    .expect(404, done);
+            });
+        });
+
     });
 });
