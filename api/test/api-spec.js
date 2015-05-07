@@ -29,7 +29,7 @@ describe('ApiController', function () {
                 request(app)
                     .get('/api/v1/templates?page=1&max=25')
                     .set('Accept', 'application/json')
-                    .expect({count: 0, page: 1, templates: []})
+                    .expect({count: 0, page: 1, next: false, prev: false, templates: []})
                     .expect(200, done);
             });
         });

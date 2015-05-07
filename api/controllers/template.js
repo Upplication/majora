@@ -61,8 +61,8 @@ Template.create = function (req, res) {
         ])
             .then(function (results) {
                 deferredUpload.resolve({
-                    css: results[0],
-                    image: results[1]
+                    css: results[0].value,
+                    image: results[1].value
                 });
             }, function () {
                 deferredUpload.reject();

@@ -46,7 +46,7 @@ describe('TemplateController', function () {
                 request(app)
                     .post('/test/template/create')
                     .set('Accept', 'application/json')
-                    .attach('files', 'test/fixtures/Chrysanthemum.jpg')
+                    .attach('snapshot_0', 'test/fixtures/Chrysanthemum.jpg')
                     .field('name', 'name')
                     .expect('Content-Type', /json/)
                     .expect({"success": false})
@@ -60,7 +60,7 @@ describe('TemplateController', function () {
                     .post('/test/template/create')
                     .set('Accept', 'application/json')
                     .field('name', 'name')
-                    .field('css', 'css')
+                    .attach('css', 'test/fixtures/test.css')
                     .expect('Content-Type', /json/)
                     .expect({"success": false})
                     .expect(400, done);
@@ -74,8 +74,8 @@ describe('TemplateController', function () {
                     .post('/test/template/create')
                     .set('Accept', 'application/json')
                     .field('name', 'name')
-                    .field('css', 'css')
-                    .attach('files', 'test/fixtures/Chrysanthemum.jpg')
+                    .attach('css', 'test/fixtures/test.css')
+                    .attach('snapshot_0', 'test/fixtures/Chrysanthemum.jpg')
                     .expect('Content-Type', /json/)
                     .expect(201, done);
             });
@@ -86,21 +86,16 @@ describe('TemplateController', function () {
                     .post('/test/template/create')
                     .set('Accept', 'application/json')
                     .field('name', 'template-basic')
-                    .field('css', 'css')
-                    .attach('files', 'test/fixtures/Chrysanthemum.jpg')
-                    .end(function (err, result) {
+                    .attach('css', 'test/fixtures/test.css')
+                    .attach('snapshot_0', 'test/fixtures/Chrysanthemum.jpg')
+                    .end(function () {
                         TemplateModel.findByName('template-basic', function(err, data) {
-
                             data.should.be.not.null;
-                            
                             data.name.should.be.eql('template-basic');
-                            
                             data.snapshots.length.should.be.eql(1);
                             data.snapshots[0].should.be.not.null;
                             data.snapshots[0].should.be.eql('http://image.com/mocked.jpg');
-
                             data.version.should.be.eql(1);
-
                             data.author.should.be.eql('test@test.es');
 
                             done();
