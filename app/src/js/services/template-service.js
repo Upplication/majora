@@ -41,6 +41,23 @@
         };
 
         /**
+         * Get a single template
+         * @param {String} name Template name
+         * @returns {promise}
+         */
+        service.get = function (name) {
+            var deferred = $q.defer();
+
+            $http.get(endpoint + '/api/v1/template/' + name).then(function (response) {
+                deferred.resolve(response.data);
+            }, function (err) {
+                deferred.reject(err);
+            });
+
+            return deferred.promise;
+        };
+
+        /**
          * Retrieves a list of templates for the given page
          * @param {Number} page Page number
          * @return {promise}

@@ -1,0 +1,30 @@
+<div class="container" data-ng-controller="ViewTemplateCtrl as view">
+    <div class="col-sm-10 col-sm-offset-1">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    View template
+                </div>
+            </div>
+
+            <div class="panel-body">
+                <div class="alert alert-danger" data-ng-if="view.error">
+                    <p>This template does not exist.</p>
+                </div>
+
+                <div class="template" data-ng-if="!view.error">
+                    <h1 class="tpl-name">{{ view.data.name }}</h1>
+                    <p class="tpl-version"><strong>Version:</strong> {{ view.data.version }}</p>
+                    <p class="tpl-author"><strong>Author:</strong> {{ view.data.author }}</p>
+                    <p class="tpl-created"><strong>Created:</strong> {{ view.data.created }}</p>
+
+                    <ul>
+                        <li data-ng-repeat="pic in view.data.snapshots">
+                            <img data-ng-src="{{ pic }}" alt="Snapshot" />
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
