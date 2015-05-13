@@ -37,7 +37,7 @@ var remove = function (file) {
  */
 Template.create = function (req, res) {
     var form = req.body,
-        css = req.files.css,git
+        css = req.files.css,
         snapshots = [],
         sendError = function () {
             res.status(400).send({
