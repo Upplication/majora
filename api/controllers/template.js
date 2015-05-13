@@ -5,14 +5,10 @@ var validators = require('../util/validators'),
     aws = require('../util/aws'),
     q = require('q');
 
-var Template = {},
-    sendError = function () {
-        res.status(400).send({
-            success: false
-        });
-    };
+var Template = {};
 
 var upload = function (file, tpl) {
+
     var deferred = q.defer();
 
     aws.upload(Date.now() + '_' + tpl + '.' + file[0].extension, file[0].path, function (err, data) {
@@ -23,11 +19,31 @@ var upload = function (file, tpl) {
     return deferred.promise;
 };
 
+var remove = function (file) {
+
+    var deferred = q.defer();
+
+    aws.remove(file, function (err, data) {
+        if (err) deferred.reject();
+        deferred.resolve();
+    });
+
+    return deferred.promise;
+};
+/**
+ * Create a new template
+ * @param req
+ * @param res
+ */
 Template.create = function (req, res) {
     var form = req.body,
-        css = req.files.css,
+        css = req.files.css,git
         snapshots = [],
-       
+        sendError = function () {
+            res.status(400).send({
+                success: false
+            });
+        },
         deferred = q.defer();
 
     // Retrieve the snapshots from the form (currently only the first will be used)
@@ -54,40 +70,39 @@ Template.create = function (req, res) {
     }
 
     deferred.promise.then(function () {
-        var deferredUpload = q.defer();
-
-        q.allSettled([
+        return q.allSettled([
             upload(css, form.name),
             upload(snapshots[0], form.name)
         ])
-            .then(function (results) {
-                deferredUpload.resolve({
-                    css: results[0].value,
-                    image: results[1].value
-                });
-            }, function () {
-                deferredUpload.reject();
+    })
+    .then(function (results) {
+        return {
+            css: results[0].value,
+            image: results[1].value
+        }
+    })
+    .then(function (uploads) {
+        TemplateModel.create({
+            name: form.name,
+            version: 1,
+            css: uploads.css,
+            author: req.user.username,
+            snapshots: [uploads.image]
+        }, function (err) {
+            if (err) sendError();
+            res.status(201);
+            res.send({
+                success: true
             });
-
-        deferredUpload.promise.then(function (uploads) {
-            TemplateModel.create({
-                name: form.name,
-                version: 1,
-                css: uploads.css,
-                author: req.user.username,
-                snapshots: [uploads.image]
-            }, function (err) {
-                if (err) sendError();
-                res.status(201);
-                res.send({
-                    success: true
-                });
-            });
-        }, sendError);
-    }, sendError);
+        });
+    })
+    .fail(sendError)
+    .done();
 };
 /**
  * get a template or get 404
+ * @param req
+ * @param res
  */
 Template.get = function (req, res) {
     TemplateModel.findByName(req.params.name, function(err, template){
@@ -103,80 +118,101 @@ Template.get = function (req, res) {
 };
 /**
  * update the css and the logo
+ * @param req
+ * @param res
  */
 Template.update = function (req, res) {
     var deferred = q.defer(),
+        sendError = function () {
+            res.status(400).send({
+                success: false
+            });
+        },
+        snapshots = [],
         template = undefined;
 
+    for (var f in req.files) {
+        if (req.files.hasOwnProperty(f) && f.indexOf('snapshot_') !== -1) {
+            snapshots.push(req.files[f]);
+        }
+    }
 
-    if (req.files.files ||
-        req.files.files.length < 1) {
+    if (!req.files ||
+        ((!req.files.css || req.files.css.length != 1) &&
+            snapshots.length < 1)) {
         sendError();
+        return;
     }
     
-    TemplateModel.findByName(req.params.name, function(err, template){
+    TemplateModel.findByName(req.params.name, function(err, templateLoaded){
         if (err) deferred.reject();
-        if (template) {
-            deferred.resolve(template);
+        if (templateLoaded) {
+            template = templateLoaded;
+            deferred.resolve();
         }
         else {
-            res.status(404).send();
+           deferred.reject();
         }
     });
 
-
-
-    // update
-    deferred.promise.then(function (template) {
+    // update:
+    deferred.promise.then(function () {
         // update
         template.version = template.version + 1;
-        // try to update css
+        // try to upload css
         if (req.files.css) {
-            upload(snapshots[0], form.name);
+            return upload(req.files.css, req.params.name);
         }
         else {
-             var deferred = q.defer();
-             deffered.resolve();
-             return deffered.promise;
+             return undefined;
         }
-
-        if (req.files.snapshots) {
-            upload(css, form.name);
-        }
-
-         nextDefer.allSettled([
-            if (req.files.css) {
-               
-            }
-            if (req.files.snapshots) {
-                
-            }
-           
-        ])
-               
-        res.status(200);
-        res.send({});
     })
+    // save css
     .then(function(css){
         // save new css if exists
         if (css) {
+            var oldCss = template.css;
             template.css = css;
-            // TODO: delete images
-        }
-
-        // upload img if exists
-        if (req.files.snapshots) {
-            upload(css, form.name);
+            return remove(oldCss);
         }
         else {
-            var deferred = q.defer();
-            deffered.resolve();
-            return deffered.promise;
+            return undefined;
         }
-
     })
+    // upload snapshot
+    .then(function(){
+        // upload img if exists
+        // Retrieve the snapshots from the form (currently only the first will be used)
+        if (snapshots.length >= 1) {
+            return upload(snapshots[0], req.params.name);
+        }
+        else {
+            return undefined;
+        }
+    })
+    // save snapshot
     .then(function(img){
-
+        if (img) {
+            var oldSnapshot = template.snapshots;
+            template.snapshots = [img];
+            return remove(oldSnapshot[0]);
+        }
+        else {
+            return undefined;
+        }
+    })
+    // save object
+    .then(function(){
+        var deferred = q.defer();
+        template.save(function(err, data){
+            if (err)  deferred.reject(err);
+            else  deferred.resolve();
+        });
+        return deferred.promise;
+    })
+    .then(function(){
+        res.status(200);
+        res.send({success:true});
     })
     .fail(sendError)
     .done();

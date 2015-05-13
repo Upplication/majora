@@ -22,5 +22,13 @@ module.exports = {
         };
         console.log(params);
         awsS3.upload(params, callback);
-	}
+	},
+    remove: function(name, callback) {
+        var params = {
+          Bucket: bucket,
+          Key: name.split('.com')[1]
+        };
+         console.log(params);
+        awsS3.deleteObject(params, callback);
+    }
 };

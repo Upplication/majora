@@ -15,7 +15,12 @@ var app = require('../app.js');
 aws.upload = function(name, body, callback) {
     callback(null, {
         Location: "http://image.com/mocked.jpg"
-    })
+    });
+};
+
+aws.remove = function(name, callback) {
+    console.log("removed");
+    callback(null, {});
 };
 // mock auth
 var mockAuth = function (req, res, next) {
@@ -70,7 +75,6 @@ describe('TemplateController', function () {
 
         describe('when all fields are provided', function () {
             it('should return 201', function (done) {
-                this.timeout(10000);
                 request(app)
                     .post('/test/template/create')
                     .set('Accept', 'application/json')
@@ -82,7 +86,6 @@ describe('TemplateController', function () {
             });
 
              it('should create a template in mongo', function (done) {
-                this.timeout(10000);
                 request(app)
                     .post('/test/template/create')
                     .set('Accept', 'application/json')
@@ -106,9 +109,9 @@ describe('TemplateController', function () {
         });
     });
 
-app.get('/test/template/:name', mockAuth, TemplateController.get);
+    app.get('/test/template/:name', mockAuth, TemplateController.get);
 
-describe('get', function () {
+    describe('get', function () {
         
         before(function (done) {
             utils.clearDb(done);
@@ -126,7 +129,7 @@ describe('get', function () {
         describe('when name exists', function () {
             before(function (done) {
                 UserModel.create({username: "test2@test2.es", password: "1234"}, function(err, user) {
-                    TemplateModel.create({name: "template-test", author: user.username, version: 1}, function(err, template) {
+                    TemplateModel.create({name: "template-test", snapshots: ["http://uri.com/fake.png"], author: user.username, version: 1}, function(err, template) {
                         done();
                     });
                 });
@@ -167,5 +170,112 @@ describe('get', function () {
             });
         });
 
+    });
+
+    app.put('/test/template/:name', mockAuth, TemplateController.update);
+
+    describe('update', function () {
+        before(function (done) {
+            utils.clearDb(done);
+        });
+
+        describe('when template not exists', function () {
+
+            it('should return 400', function (done) {
+                request(app)
+                    .put('/test/template/not-exists')
+                    .set('Accept', 'application/json')
+                    .attach('css', 'test/fixtures/test.css')
+                    .attach('snapshot_0', 'test/fixtures/Chrysanthemum.jpg')
+                    .expect(400, done);
+            });
+        });
+        
+        describe('when no snapshot and css are provided', function () {
+            
+            before(function (done) {
+                UserModel.create({username: "test3@test3.es", password: "1234"}, function(err, user) {
+                    TemplateModel.create({name: "template-test-3", author: user.username, snapshots: ["http://uri.com/fake.png"], version: 1}, function(err, template) {
+                        done();
+                    });
+                });
+            });
+
+            it('should return success false', function (done) {
+                request(app)
+                    .put('/test/template/template-test-3')
+                    .set('Accept', 'application/json')
+                    .expect('Content-Type', /json/)
+                    .expect({"success": false})
+                    .expect(400, done);
+            });
+        });
+
+        describe('when css are provided', function () {
+
+            before(function (done) {
+                UserModel.create({username: "test4@test4.es", password: "1234"}, function(err, user) {
+                    TemplateModel.create({name: "template-test-4", author: user.username, snapshots: ["http://uri.com/fake.png"], css: "http://uri.com/css", version: 1}, function(err, template) {
+                        done();
+                    });
+                });
+            });
+
+            after(function (done) {
+                utils.clearDb(done);
+            });
+
+            it('should return update only the css and the version number', function (done) {
+                request(app)
+                    .put('/test/template/template-test-4')
+                    .set('Accept', 'application/json')
+                    .attach('css', 'test/fixtures/test.css')
+                    .expect('Content-Type', /json/)
+                    .expect(200)
+                    .end(function(){
+                        TemplateModel.findByName("template-test-4", function(err, template) {
+                            template.css.should.be.eql("http://image.com/mocked.jpg");
+                            template.name.should.be.eql("template-test-4");
+                            template.snapshots[0].should.be.eql("http://uri.com/fake.png");
+                            template.version.should.be.eql(2);
+                            done();
+                        });
+                    });
+            });
+        });
+
+        describe('when snapshots are provided', function () {
+
+            before(function (done) {
+                UserModel.create({username: "test5@test5.es", password: "1234"}, function(err, user) {
+                    TemplateModel.create({name: "template-test-5", author: user.username, snapshots: ["http://uri.com/fake.png"], css: "http://uri.com/css", version: 1}, function(err, template) {
+                        done();
+                    });
+                });
+            });
+
+            after(function (done) {
+                utils.clearDb(done);
+            });
+
+            it('should return update only the css and the version number', function (done) {
+                request(app)
+                    .put('/test/template/template-test-5')
+                    .set('Accept', 'application/json')
+                    .attach('snapshot_0', 'test/fixtures/Chrysanthemum.jpg')
+                    .expect('Content-Type', /json/)
+                    .expect(200)
+                    .end(function(){
+                        TemplateModel.findByName("template-test-5", function(err, template) {
+                            console.log(template);
+                            template.css.should.be.eql("http://uri.com/css");
+                            template.name.should.be.eql("template-test-5");
+                            template.snapshots[0].should.be.eql("http://image.com/mocked.jpg");
+                            template.version.should.be.eql(2);
+                            done();
+                        });
+                    });
+            });
+        });
     });
 });

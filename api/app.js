@@ -59,14 +59,9 @@ app.get('/api/v1/templates/:authorUserName', ApiController.v1.getTemplates);
 app.get('/api/v1/template/:name', ApiController.v1.getTemplate);
 
 // template routes
-<<<<<<< HEAD
 app.post('/template/create', auth, TemplateController.create);
 app.get('/template/:name', auth, TemplateController.get);
 app.put('/template/:name', auth, TemplateController.update);
-
-=======
-app.post('/templates/create', auth, TemplateController.create);
->>>>>>> 797bb78589667b5e5f407f03b1fffc05c0e2859c
 
 // Serve
 var server = app.listen(process.env.PORT || 3000, function () {
