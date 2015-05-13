@@ -3,15 +3,16 @@
 
     var TOKEN_KEY = 'login_token';
 
-    upp.provider('authService', [function () {
+    upp.provider('authService', ['$httpProvider', function ($httpProvider) {
         var service = {};
 
         /**
-         * Stores the token on localStorage
+         * Stores the token on localStorage and updates the default header
          * @param {Object} token Token
          */
         service.storeToken = function (token) {
             localStorage.setItem(TOKEN_KEY, angular.toJson(token));
+            $httpProvider.defaults.headers.common['Authorization'] = 'Bearer: ' + token.token;
         };
 
         /**

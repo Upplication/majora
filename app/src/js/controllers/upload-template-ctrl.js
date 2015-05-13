@@ -47,7 +47,7 @@
 
                 templateService.create(self.data.name, self.data.snapshots, self.data.css)
                     .then(function (data) {
-                        $location.path('/template/' + data.name);
+                        $location.path('/template/' + self.data.name);
                     }, function () {
                         self.error = true;
                         self.busy = false;

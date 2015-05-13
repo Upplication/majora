@@ -1,9 +1,20 @@
 <div class="container" data-ng-controller="ListTemplatesCtrl as list">
     <h1>Templates</h1>
 
+    <div class="alert alert-warning" data-ng-show="list.templates.length == 0 && !list.loading">
+        There are no templates at the moment.
+    </div>
+
     <ul>
         <li data-ng-repeat="tpl in list.templates">
-
+            <h4 data-ng-bind="tpl.name"></h4>
         </li>
     </ul>
+
+    <div class="pagination">
+        <ul>
+            <li data-ng-show="list.hasPrevPage" data-ng-click="list.changePage(list.page - 1)">Previous page</li>
+            <li data-ng-show="list.hasNextPage" data-ng-click="list.changePage(list.page + 1)">Next page</li>
+        </ul>
+    </div>
 </div>
