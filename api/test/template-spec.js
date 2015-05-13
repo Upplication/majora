@@ -19,7 +19,6 @@ aws.upload = function(name, body, callback) {
 };
 
 aws.remove = function(name, callback) {
-    console.log("removed");
     callback(null, {});
 };
 // mock auth
@@ -267,7 +266,6 @@ describe('TemplateController', function () {
                     .expect(200)
                     .end(function(){
                         TemplateModel.findByName("template-test-5", function(err, template) {
-                            console.log(template);
                             template.css.should.be.eql("http://uri.com/css");
                             template.name.should.be.eql("template-test-5");
                             template.snapshots[0].should.be.eql("http://image.com/mocked.jpg");

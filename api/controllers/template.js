@@ -217,5 +217,11 @@ Template.update = function (req, res) {
     .fail(sendError)
     .done();
 };
+/**
+ *
+ */
+Template.delete(function(req, res){
+
+});
 
 module.exports = Template;

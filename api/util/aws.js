@@ -27,7 +27,6 @@ module.exports = {
           Bucket: bucket,
           Key: name.split('.com')[1]
         };
-         console.log(params);
         awsS3.deleteObject(params, callback);
     }
 };
